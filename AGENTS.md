@@ -36,6 +36,17 @@ Read in this order:
 - Staff dashboard supports completion/review tracking and drill-down through that hierarchy.
 - Smart อสม. integration is future work; structured export comes first.
 
+## Frontend Hosting — HARD RULE
+- Frontend hosting standard is **GitHub Pages** from `aodxx/KCG-Health-OSM`.
+- Expected public URL is `https://aodxx.github.io/KCG-Health-OSM/`.
+- Build/config must support base path `/KCG-Health-OSM/`.
+- Manifest, service worker, asset paths and client routing must work under that base path.
+- GitHub Actions must include GitHub Pages deployment.
+- Agent must verify deployed public URL/readback itself after relevant frontend changes.
+- GitHub Pages is static hosting only. Backend/database/Auth introduced later must run separately and be accessed securely over HTTPS.
+- Never embed service-role keys, backend secrets or privileged credentials in the frontend.
+- Changing the primary frontend host requires explicit project-owner approval.
+
 ## Canonical Data Rules
 - `Person` and `UserAccount` are separate concepts.
 - `VolunteerAssignment` is the source of responsibility history; do not encode responsibility only as `household.volunteer_id`.
@@ -67,9 +78,10 @@ Agent MUST NOT start Phase 1 automatically.
 Before advancing any phase:
 1. all current-phase exit criteria are verified from implementation evidence
 2. install/check/lint/test/build/runtime/CI gates pass as applicable
-3. `PROGRESS.md` matches GitHub HEAD
-4. agent reports `PHASE N PASS`
-5. project owner explicitly authorizes the next phase
+3. GitHub Pages deployment/readback passes for phases touching frontend
+4. `PROGRESS.md` matches GitHub HEAD
+5. agent reports `PHASE N PASS`
+6. project owner explicitly authorizes the next phase
 
 If incomplete, report `PHASE N NOT READY` and continue fixing only the current phase.
 
@@ -79,6 +91,7 @@ Allowed:
 - Staff / Volunteer / Citizen role shells and route skeletons
 - PWA foundation
 - Thai mobile-first design system
+- GitHub Pages-compatible frontend build/deployment foundation
 - domain types for geography, households, assignments, forms, campaigns, recipients, submissions
 - repository interfaces and synthetic mock implementations
 - offline queue/UUID/idempotency foundation
@@ -104,11 +117,12 @@ For every implementation task:
 5. add/update tests
 6. run install/check/lint/test/build as applicable
 7. verify routes/runtime/mobile/readback
-8. inspect security/data exposure
-9. fix failures autonomously and rerun
-10. update `PROGRESS.md`
-11. commit and push
-12. verify GitHub readback and CI
+8. deploy/verify GitHub Pages when frontend delivery is affected
+9. inspect security/data exposure
+10. fix failures autonomously and rerun
+11. update `PROGRESS.md`
+12. commit and push
+13. verify GitHub readback, CI and Pages deployment status
 
 The project owner is not routine QA. Do not stop to ask the owner to test behavior the agent can verify itself.
 
@@ -151,7 +165,8 @@ After each task/phase report:
 - files changed
 - tests and results
 - build result
-- CI/readback result
+- CI result
+- GitHub Pages deployment/readback result when relevant
 - remaining gaps
 - risks
 - exact phase status: `PASS`, `NOT READY`, or `BLOCKED`
