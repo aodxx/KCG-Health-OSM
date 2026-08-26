@@ -1,38 +1,64 @@
-# Product Direction Sync + Phase 0 Recovery TODO
+# Project Structure + Phase 0 Recovery TODO
 
-## GitHub synchronization
+## Sync and source audit
 
 - [ ] ตรวจ remote, branch และ local diff ก่อน sync
-- [ ] fetch/pull `aodxx/KCG-Health-OSM` branch `main`
-- [ ] preserve local changes ที่ใช้ต่อได้และตรวจ merge/conflict
-- [ ] ยืนยันไฟล์ Product Definition และ Source of Truth ใหม่หลัง sync
+- [ ] sync `aodxx/KCG-Health-OSM` branch `main`
+- [ ] อ่าน Product Definition, PRD, AGENTS, Phase 0 checklist, autonomous rules, D7, repository structure และ architecture docs ทั้งหมด
+- [ ] อ่านคำสั่งแนบให้ครบทุกส่วน
+- [ ] ตรวจ source/workspace implementation จริง
+- [ ] จำแนก prototype เป็น KEEP / REFACTOR / PARK
 
-## Source of Truth audit
+## Repository structure
 
-- [ ] อ่าน `docs/product/PRODUCT-DEFINITION-v0.2.md`
-- [ ] อ่าน `PRD.md`, `AGENTS.md`, Phase 0 checklist และ `AUTONOMOUS-AGENT-RULES.md`
-- [ ] อ่าน architecture D5–D6 ที่เกี่ยวข้อง
-- [ ] ทำ gap analysis ใหม่ตาม Product Definition/PRD ล่าสุด
-- [ ] จำแนกโค้ดเดิม KEEP / REFACTOR / PARK
+- [ ] ตรวจ root files: README, PRD, AGENTS, PROGRESS, package, lockfile, env example, tsconfig, vite, eslint, prettier, public, src, tests, docs, CI
+- [ ] สร้างหรือปรับ `PROGRESS.md` เป็นสถานะกลางของโครงการ
+- [ ] รักษา separation ระหว่าง UI / Domain / Repository / Mock Data / Services
+- [ ] ไม่ให้ legacy prototype กำหนด architecture ใหม่
 
-## Phase 0 foundation only
+## Phase 0 domain foundation
 
-- [ ] ปรับ FormDefinition / FormVersion / FormQuestion contracts
-- [ ] ปรับ Campaign / AudienceSelection contracts
-- [ ] ปรับ Household / HouseholdMember / VolunteerAssignment contracts
-- [ ] ปรับ Submission / SubmissionAnswer / SubmittedBy contracts
-- [ ] ตรวจ repository interfaces, mock repositories, synthetic seed data
-- [ ] ตรวจ offline queue, UUID/idempotency, PWA, role shells และ route skeleton
-- [ ] ห้ามนำ NCD/Visit/Referral workflow กลับเข้า runtime
-- [ ] ห้ามเชื่อม backend, API, Smart อสม. หรือ external integration
+- [ ] geography: Tambon, ServiceUnit, Village
+- [ ] people: Person, UserAccount, Staff, Volunteer
+- [ ] household: Household, HouseholdMember, HouseholdAssignment/VolunteerAssignment
+- [ ] form engine: FormDefinition, FormVersion, FormSection, FormQuestion, QuestionOption, QuestionType
+- [ ] campaign: Campaign, AudienceDefinition, AudienceRule, CampaignRecipient
+- [ ] submission: Submission, SubmissionAnswer, SubmissionStatus, SubmissionMode
+- [ ] review/follow-up types เป็น contracts เท่านั้น ไม่สร้าง workflow
+- [ ] sync: queue item, sync status, client UUID, idempotency key
+- [ ] FormVersion immutable และ future conditional/rule config types
+- [ ] ไม่มี hard-coded clinical threshold
 
-## Verification and delivery
+## Data access and mock
 
-- [ ] fresh install ผ่าน
-- [ ] lint ผ่าน
-- [ ] tests ผ่าน
-- [ ] production build ผ่าน
-- [ ] route/runtime/CI/deployment-readback ตรวจได้
-- [ ] commit และ push ไป `aodxx/KCG-Health-OSM`
-- [ ] รายงาน branch, SHA, results และ SYNCED/NOT SYNCED TO GITHUB
-- [ ] ห้ามเริ่ม Phase 1 เอง
+- [ ] repository interfaces สำหรับ people, households, volunteers, forms, campaigns, submissions
+- [ ] mock implementations และ synthetic seed data
+- [ ] household/member/assignment history รองรับ startAt/endAt/active
+- [ ] UI ไม่ import mock arrays โดยตรงทุกหน้า
+- [ ] ไม่มี Supabase/API/Google Sheets/backend/Smart อสม.
+
+## Route and UI foundation
+
+- [ ] staff dashboard, forms, forms/new, campaigns, campaign detail, submissions/review, households, volunteers, settings/profile
+- [ ] volunteer home, assigned forms, households, household detail, person detail, proxy completion shell, sync status, profile
+- [ ] citizen home, assigned forms, form completion shell, submission status, profile
+- [ ] shared AppShell, navigation, states, OfflineBanner, status/form/campaign/submission/household primitives
+- [ ] Thai-first, mobile-first, Android-first, 44px touch targets, text/icon status
+
+## PWA and quality
+
+- [ ] `.env.example` แบบไม่มี secret
+- [ ] manifest, icon metadata, service worker registration และ mobile viewport
+- [ ] fresh install
+- [ ] lint, test, build
+- [ ] domain/status, form version, assignment, mock repository, routes, role navigation และ accessibility tests
+- [ ] `.github/workflows/ci.yml` install/lint/test/build
+- [ ] ตรวจ runtime logs, route readback, deployment/readback ที่ทำได้
+
+## Delivery gate
+
+- [ ] อัปเดต PROGRESS.md ก่อนจบ
+- [ ] commit และ push ไป GitHub
+- [ ] รายงาน branch, commit SHA, test/build results
+- [ ] ระบุ SYNCED TO GITHUB หรือ NOT SYNCED TO GITHUB พร้อมสาเหตุ
+- [ ] ห้ามเริ่ม Phase 1 และห้ามเพิ่ม NCD/Visit/Referral/clinical workflow
