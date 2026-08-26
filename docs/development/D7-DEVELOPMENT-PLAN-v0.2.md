@@ -1,0 +1,91 @@
+# D7 — Development Plan v0.2
+
+สถานะ: Active implementation plan
+วันที่เริ่มใช้: 2026-08-27
+
+เอกสารนี้แทน `D7-DEVELOPMENT-PLAN-v0.1.md` สำหรับการพัฒนาต่อจาก Product Definition v0.2 เป็นต้นไป
+
+## 1. Source of Truth
+
+1. `docs/product/PRODUCT-DEFINITION-v0.2.md`
+2. `PRD.md`
+3. `MASTER-ROADMAP.md`
+4. `AGENTS.md`
+5. `docs/development/AUTONOMOUS-AGENT-RULES.md`
+6. current phase checklist
+7. architecture documents
+
+D7 v0.1 และ blueprint เก่าที่ขัดกับรายการด้านบนเป็น historical reference เท่านั้น
+
+## 2. Product Core
+
+`Create Form → Define Audience → Publish → Route to Citizen/Volunteer → Complete → Submit → Review → Follow-up/Referral → Export-ready`
+
+ระบบต้องไม่ถูกออกแบบเป็น NCD-only, visit-only หรือ referral-only architecture
+
+## 3. Delivery Phases
+
+### Phase 0 — Repository & Frontend Foundation
+สร้าง scaffold, 3 role shells, domain contracts, repository interfaces, synthetic mock data, PWA, offline/idempotency foundation, tests และ CI
+
+### Phase 1 — Form Builder + Audience Selection + Campaign Publish
+สร้าง flexible Form Builder, immutable FormVersion, audience resolver และ campaign recipient materialization ด้วย mock data
+
+### Phase 2 — Citizen & Volunteer Submission
+รองรับ citizen self-completion และ volunteer proxy completion พร้อม submission provenance
+
+### Phase 3 — Household, Population & Responsibility
+จัดการ hierarchy, household membership, volunteer assignment, import validation และ audit trail
+
+### Phase 4 — Review Inbox + Dashboard
+สร้าง review policy, submission review states, progress dashboard และ drill-down ตามพื้นที่/อสม./ครัวเรือน/บุคคล
+
+### Phase 5 — Follow-up, Appointment & Referral
+สร้าง action หลัง review โดยไม่ทำ diagnosis/full EMR
+
+### Phase 6 — Backend + Authentication + Authorization
+เปลี่ยน mock repositories เป็น backend adapter จริง, auth, server-enforced permissions, RLS/equivalent และ audit storage
+
+### Phase 7 — Production-grade Offline & Sync
+local persistence, queue, retry, idempotency, conflict policy และ safe device/session behavior
+
+### Phase 8 — Export & Smart อสม. Readiness
+structured export และศึกษาช่องทาง official integration โดยห้าม scrape/auto-fill ระบบรัฐที่ไม่ได้รับอนุญาต
+
+### Phase 9 — Pilot Readiness
+privacy/security/legal basis, retention, backup/restore, onboarding, training, incident response และ controlled pilot gate
+
+### Phase 10 — Production
+production deployment, monitoring, operational runbooks, backup/restore verification, support และ release governance
+
+รายละเอียด task/test/exit criteria ของแต่ละ Phase ใช้ `MASTER-ROADMAP.md` เป็นหลัก
+
+## 4. Engineering Rules
+
+- domain-first; UI ไม่ผูกกับ data source โดยตรง
+- repository abstraction ก่อน backend จริง
+- mobile-first / Thai-first / offline-aware
+- synthetic data by default
+- no secrets in Git
+- no production clinical threshold without health-professional approval
+- authorization ต้องบังคับฝั่ง server เมื่อ backend ถูกนำมาใช้
+- tests + lint + build + runtime/readback ต้องผ่านก่อนส่งมอบ
+- GitHub เป็น handoff point; local/workspace-only ไม่ถือว่าส่งมอบ
+
+## 5. Phase Gate
+
+AI Agent ห้ามข้าม Phase เอง
+
+ก่อนเปลี่ยน Phase ต้องมี:
+1. exit criteria ครบ
+2. quality gates ผ่าน
+3. GitHub readback ยืนยัน
+4. `PROGRESS.md` อัปเดต
+5. รายงาน `PHASE N PASS`
+6. เจ้าของโครงการอนุมัติ Phase ถัดไป
+
+## 6. Current Phase
+
+Current phase: **Phase 0 Recovery — Repository & Frontend Foundation**
+
+งาน Phase 1 ยังห้ามเริ่มจนกว่าจะได้รับอนุมัติหลัง Phase 0 PASS
