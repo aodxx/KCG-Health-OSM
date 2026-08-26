@@ -6,7 +6,7 @@ Phase 0 Recovery — Repository & Frontend Foundation
 
 ## Overall Status
 
-IN PROGRESS — `.env.example` blocker remains
+IN PROGRESS — GitHub Pages compatibility implemented locally; `.env.example` blocker and public Pages readback remain
 
 ## Product Direction
 
@@ -28,9 +28,11 @@ Repository ถูก sync จาก `aodxx/KCG-Health-OSM` และ implementat
 
 กำลังปิด Phase 0 delivery ผ่าน PR #1 โดยยังไม่ merge และยังไม่เริ่ม Phase 1
 
+เพิ่ม GitHub Pages project-site base `/KCG-Health-OSM/`, hash routing สำหรับ static hosting, relative PWA manifest/scope, base-aware service worker registration/cache, `deploy-pages.yml` และ `.nojekyll`
+
 ## Remaining
 
-`.env.example` แบบไม่มี secret ยังไม่สามารถสร้างได้ เพราะ environment-file guard ของ workspace ป้องกันการสร้างหรือแก้ไฟล์ `.env.example` โดยตรง และ session นี้ไม่มี `webdev_request_secrets` capability ที่ใช้งานได้
+`.env.example` แบบไม่มี secret ยังไม่สามารถสร้างได้ เพราะ environment-file guard ของ workspace ป้องกันการสร้างหรือแก้ไฟล์ `.env.example` โดยตรง และ session นี้ไม่มี capability สำหรับสร้างไฟล์ดังกล่าว อีกทั้ง repository ยังไม่มี GitHub Pages site configuration ให้ตรวจ public readback จาก API
 
 ## Known Risks
 
@@ -42,7 +44,7 @@ Repository ถูก sync จาก `aodxx/KCG-Health-OSM` และ implementat
 
 ## Latest Commit
 
-`f2fbe3005351422feb18ab9339034ebefa04c254` ก่อนอัปเดต PROGRESS รอบสุดท้าย
+งาน Pages compatibility รอบนี้ยังไม่ได้ commit; HEAD ก่อน commit คือ `1cca6a3fde2752fbe6b81351c1903b25cb0e2988`
 
 ## Test Status
 
@@ -59,4 +61,4 @@ PASS — PR #1 GitHub Actions `KCG Health OSM CI / verify` ผ่านหลั
 
 ## Next Action
 
-หากระบบอนุญาตให้เพิ่ม `.env.example` ให้เพิ่มไฟล์นี้แล้วรัน gates และ push อีกครั้ง จากนั้นจึงตัดสิน `PHASE 0 PASS`; จนกว่าจะถึงจุดนั้นให้ถือว่า `PHASE 0 NOT READY` และห้ามเริ่ม Phase 1
+ตรวจ diff และ canonical domain contracts, รัน gates อีกครั้ง, commit/push branch recovery และเปิด PR/readback workflow. หาก `.env.example` หรือ GitHub Pages configuration ยังถูกระบบ/สิทธิ์ปิดกั้น ให้ตัดสิน `PHASE 0 NOT READY` อย่างโปร่งใส และห้ามเริ่ม Phase 1

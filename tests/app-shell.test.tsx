@@ -6,6 +6,7 @@ import App from "@/App";
 describe("App shell", () => {
   afterEach(() => cleanup());
   it("renders the volunteer task-first shell", async () => {
+    window.location.hash = "";
     window.history.pushState({}, "", "/volunteer");
     render(<App />);
     expect(await screen.findByRole("heading", { name: "แบบฟอร์มที่ได้รับ" })).toBeInTheDocument();
@@ -16,6 +17,7 @@ describe("App shell", () => {
 
   it("renders mobile navigation with labeled controls and no basic axe violations", async () => {
     window.innerWidth = 390;
+    window.location.hash = "";
     window.history.pushState({}, "", "/volunteer");
     const { container } = render(<App />);
     expect(await screen.findByRole("heading", { name: "แบบฟอร์มที่ได้รับ" })).toBeInTheDocument();
@@ -32,6 +34,7 @@ describe("App shell", () => {
     ["/staff/cases", "คำตอบที่รอตรวจ"],
     ["/citizen/appointments", "แบบฟอร์มที่ได้รับ"],
   ])("renders a non-404 route skeleton for %s", async (path, expected) => {
+    window.location.hash = "";
     window.history.pushState({}, "", path);
     render(<App />);
     expect(await screen.findByRole("heading", { name: expected })).toBeInTheDocument();
@@ -43,6 +46,7 @@ describe("App shell", () => {
     "/volunteer/households/HH0601", "/volunteer/people/P0601", "/volunteer/forms/FORM001", "/volunteer/sync",
     "/citizen/forms", "/citizen/forms/FORM001", "/citizen/submissions",
   ])("keeps required Phase 0 route %s out of 404", async (path) => {
+    window.location.hash = "";
     window.history.pushState({}, "", path);
     render(<App />);
     expect(await screen.findByText("กำลังเตรียมพื้นที่นี้")).toBeInTheDocument();

@@ -206,6 +206,8 @@ function vitePluginStorageProxy(): Plugin {
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
 
 export default defineConfig({
+  // Phase 0 GitHub Pages foundation: project-site base path must be preserved in production.
+  base: "/KCG-Health-OSM/",
   plugins,
   resolve: {
     alias: {

@@ -1,32 +1,25 @@
-# Phase 0 Final Recovery TODO
+# Next Work — Phase 0 Closure
 
-## Sync and state
+## P0 decision
 
-- [ ] fetch/pull branch `recovery/product-direction-v0.2`
-- [ ] ตรวจ git status และ diff ก่อนแก้
-- [ ] ยืนยันว่า workspace ไม่เก่า
+- [ ] ตรวจ workspace/GitHub HEAD และ branch ปัจจุบัน
+- [ ] ปิด `.env.example` blocker ผ่านกลไกที่ได้รับอนุญาต หากยังทำไม่ได้ให้บันทึกเป็น blocker
+- [ ] ตั้ง GitHub Pages base path `/KCG-Health-OSM/`
+- [ ] ปรับ SPA routing/deep-link strategy ให้เหมาะกับ project site
+- [ ] ปรับ manifest, service worker และ asset paths ให้ทำงานใต้ base path
+- [ ] เพิ่ม GitHub Pages deployment workflow
 
-## Blocker and hygiene
+## Canonical foundation audit
 
-- [ ] สร้าง `.env.example` แบบไม่มี secret และมีคำอธิบาย Phase 0
-- [ ] ตรวจ `client/public/__manus__/`, ManusDialog, manus runtime plugin และ debug tooling
-- [ ] ตัดสิน KEEP/REMOVE สำหรับ workspace residue
-- [ ] ตรวจ generated junk, secrets, real data, node_modules/dist/cache และ package manager เดียว
+- [ ] เทียบ domain types กับ DATABASE-DESIGN-v0.2 invariants
+- [ ] ตรวจ mock repository และ responsibility scope
+- [ ] ตรวจ active runtime ไม่ใช้ legacy Visit/Observation/Case/NCD เป็นแกน
 
-## Phase 0 requirements
+## Verification
 
-- [ ] ตรวจ PROGRESS.md และอัปเดตให้ตรง HEAD
-- [ ] ตรวจ scaffold, PWA, 3 role shells, routes, domain, repository/mock, UUID/idempotency
-- [ ] ตรวจไม่มี Supabase production, clinical rules หรือ Phase 1 runtime
-
-## Quality and GitHub delivery
-
-- [ ] รัน frozen install
-- [ ] รัน check, lint, test, build
-- [ ] ตรวจ runtime logs, routes และ mobile layout
-- [ ] push branch และเปิด PR เข้า main
-- [ ] ตรวจ GitHub Actions CI จริงและแก้จนผ่าน
-- [ ] อัปเดต PROGRESS รอบสุดท้าย
-- [ ] commit/push รอบสุดท้ายและ GitHub readback
-- [ ] รายงาน branch, SHA, PR, files, gates, CI และ final status
-- [ ] หาก PASS ให้หยุดและรายงาน READY FOR PHASE 1 โดยไม่เริ่ม Phase 1
+- [ ] รัน install, check, lint, test, build
+- [ ] ตรวจ route/runtime/mobile smoke และ CI
+- [ ] deploy/readback GitHub Pages หาก repository settings อนุญาต
+- [ ] อัปเดต PROGRESS.md และ gap analysis
+- [ ] commit/push และรายงาน PHASE 0 PASS หรือ NOT READY
+- [ ] ห้ามเริ่ม Phase 1 จนกว่าเจ้าของโครงการอนุมัติ

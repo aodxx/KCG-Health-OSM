@@ -1,6 +1,6 @@
 // Civic Field Notes: Phase 0 route skeleton keeps role context visible; Phase 1 workflow remains parked outside runtime.
 import { useEffect, useState } from "react";
-import { Route, Switch, useLocation } from "wouter";
+import { Route, Router as WouterRouter, Switch, useLocation } from "wouter";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppShell } from "@/components/AppShell";
@@ -13,6 +13,31 @@ import NotFound from "@/pages/NotFound";
 import RoutePlaceholder from "@/pages/RoutePlaceholder";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+
+// GitHub Pages serves this app as a static project site, so hash navigation avoids server rewrites.
+function useGithubPagesLocation(): [string, (path: string, ...args: unknown[]) => void] {
+  const readLocation = () => {
+    const hashPath = window.location.hash.replace(/^#/, "");
+    if (hashPath) return hashPath;
+    const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+    const pathname = window.location.pathname;
+    return basePath && basePath !== "/" && pathname.startsWith(basePath) ? pathname.slice(basePath.length) || "/" : pathname || "/";
+  };
+  const [location, setLocation] = useState(readLocation);
+
+  useEffect(() => {
+    const syncLocation = () => setLocation(readLocation());
+    window.addEventListener("hashchange", syncLocation);
+    return () => window.removeEventListener("hashchange", syncLocation);
+  }, []);
+
+  const navigate = (path: string) => {
+    window.location.hash = path;
+    setLocation(path);
+  };
+
+  return [location, navigate];
+}
 
 function RoleRedirect() {
   const [, navigate] = useLocation();
@@ -28,5 +53,5 @@ export default function App() {
   const [user, setUser] = useState<MockUser>(mockUsers[0]);
   const [, navigate] = useLocation();
   const changeUser = (next: MockUser) => { setUser(next); navigate(next.role === "citizen" ? "/citizen" : next.role === "volunteer" ? "/volunteer" : "/staff"); };
-  return <ErrorBoundary><ThemeProvider defaultTheme="light"><TooltipProvider><Toaster /><Router user={user} onUserChange={changeUser} /></TooltipProvider></ThemeProvider></ErrorBoundary>;
+  return <WouterRouter hook={useGithubPagesLocation}><ErrorBoundary><ThemeProvider defaultTheme="light"><TooltipProvider><Toaster /><Router user={user} onUserChange={changeUser} /></TooltipProvider></ThemeProvider></ErrorBoundary></WouterRouter>;
 }
