@@ -12,10 +12,13 @@ export type ReferralStatus = "draft" | "sent" | "accepted" | "completed" | "canc
 export type FollowUpStatus = "planned" | "assigned" | "completed" | "cancelled";
 export type ConsentStatus = "granted" | "withdrawn" | "not_required" | "pending";
 export type AssignmentScope = "village" | "household" | "person";
-export type FormQuestionType = "short_text" | "long_text" | "number" | "checkbox" | "radio" | "select" | "date" | "time" | "yes_no";
+export type FormQuestionType = "short_text" | "long_text" | "number" | "checkbox" | "radio" | "select" | "date" | "time" | "yes_no" | "single_choice" | "multiple_choice";
 export type FormLifecycleStatus = "draft" | "published" | "archived";
 export type AudienceTargetType = "person" | "household" | "village" | "condition";
 export type CompletionMode = "self" | "proxy_by_volunteer";
+export type SubmissionMode = CompletionMode;
+export type ReviewMode = "review_all" | "review_by_rule";
+export type ReviewStatus = "pending" | "reviewed" | "action_required";
 export type SubmissionStatus = "assigned" | "in_progress" | "submitted" | "requires_review" | "reviewed" | "action_required" | "completed";
 export type ReviewPolicy = "review_all" | "review_by_rule";
 
@@ -53,8 +56,9 @@ export const SYNC_STATE_LABELS: Record<SyncState, string> = {
   failed: "ส่งไม่สำเร็จ",
 };
 
-export interface ServiceUnit { id: EntityId; name: string; villages: number[]; code?: string; unitType?: string; active?: boolean; }
-export interface Village { id: EntityId; number: number; name: string; serviceUnitId: EntityId; active?: boolean; }
+export interface Tambon { id: EntityId; name: string; districtName?: string; provinceName?: string; active?: boolean; }
+export interface ServiceUnit { id: EntityId; name: string; villages: number[]; code?: string; unitType?: string; active?: boolean; tambonId?: EntityId; }
+export interface Village { id: EntityId; number: number; name: string; serviceUnitId: EntityId; active?: boolean; tambonId?: EntityId; }
 export interface Household { id: EntityId; villageId: EntityId; label: string; memberCount: number; assignedVolunteer: string; nextVisit?: string; addressText?: string; status?: "active" | "inactive" | "moved"; }
 export interface HouseholdMembership { id: EntityId; householdId: EntityId; personId: EntityId; relationCode: string; isPrimaryContact?: boolean; validFrom?: string; validTo?: string; }
 export type HouseholdMember = HouseholdMembership;
@@ -62,12 +66,17 @@ export interface Person { id: EntityId; householdId: EntityId; displayName: stri
 export interface UserAccount { id: EntityId; personId?: EntityId; active: boolean; }
 export interface UserRole { id: EntityId; userAccountId: EntityId; roleCode: Role; active: boolean; }
 export interface RoleScope { id: EntityId; userRoleId: EntityId; serviceUnitId?: EntityId; villageId?: EntityId; caseId?: EntityId; validFrom?: string; validTo?: string; }
+export interface Staff { id: EntityId; userAccountId: EntityId; serviceUnitId: EntityId; staffType?: string; active: boolean; }
 export interface Volunteer { id: EntityId; personId?: EntityId; userAccountId?: EntityId; volunteerCode?: string; homeVillageId: EntityId; active: boolean; }
 export interface VolunteerAssignment { id: EntityId; volunteerId: EntityId; scope: AssignmentScope; villageId?: EntityId; householdId?: EntityId; personId?: EntityId; active: boolean; validFrom?: string; validTo?: string; }
+export type HouseholdAssignment = VolunteerAssignment;
 export interface Appointment { id: EntityId; personId: EntityId; location: string; scheduledAt: string; status: "planned" | "confirmed" | "completed" | "cancelled"; }
 export interface ExportJob { id: EntityId; campaignId: EntityId; format: string; status: "ready" | "queued" | "blocked"; generatedAt?: string; }
 
 export interface FormOption { value: string; label: string; order: number; }
+export type QuestionOption = FormOption;
+export interface FormSection { id: EntityId; formVersionId: EntityId; title: string; description?: string; order: number; }
+export type QuestionType = FormQuestionType;
 export interface FormQuestion { id: EntityId; key: string; label: string; description?: string; type: FormQuestionType; required: boolean; order: number; options?: FormOption[]; validation?: { min?: number; max?: number; pattern?: string }; }
 export type FormField = FormQuestion;
 export interface FormDefinition { id: EntityId; name: string; description?: string; ownerUserId: EntityId; status: FormLifecycleStatus; currentVersionId?: EntityId; }
@@ -75,6 +84,7 @@ export type FormTemplate = FormDefinition;
 export interface FormVersion { id: EntityId; formDefinitionId: EntityId; version: number; questions: FormQuestion[]; reviewPolicy: ReviewPolicy; publishedAt?: string; immutable: boolean; }
 export interface Campaign { id: EntityId; serviceUnitId: EntityId; campaignType: string; name: string; formVersionId?: EntityId; startDate?: string; endDate?: string; status: string; }
 export interface AudienceRule { id: EntityId; field: string; operator: "equals" | "not_equals" | "greater_than" | "less_than" | "in"; value: string | number | boolean | string[]; }
+export interface AudienceDefinition { id: EntityId; campaignId: EntityId; name: string; targetType: AudienceTargetType; rules?: AudienceRule[]; }
 export interface AudienceSelection { id: EntityId; campaignId: EntityId; targetType: AudienceTargetType; villageIds?: EntityId[]; householdIds?: EntityId[]; personIds?: EntityId[]; rules?: AudienceRule[]; }
 export interface CampaignRecipient { id: EntityId; campaignId: EntityId; personId: EntityId; householdId: EntityId; volunteerId?: EntityId; status: SubmissionStatus; completionMode?: CompletionMode; }
 export interface FormValidationBoundary { required: boolean; min?: number; max?: number; pattern?: string; }
@@ -85,7 +95,8 @@ export interface Visit { id: EntityId; taskId?: EntityId; caseId?: EntityId; hou
 export interface Observation { id: EntityId; visitId: EntityId; personId: EntityId; typeCode: string; valueNumeric?: number; valueText?: string; valueBoolean?: boolean; unit?: string; observedAt: string; observedBy: EntityId; source: ObservationSource; verificationStatus: VerificationStatus; }
 export interface Submission { id: EntityId; campaignRecipientId: EntityId; formVersionId: EntityId; targetPersonId: EntityId; householdId: EntityId; actualSubmitterId: EntityId; completionMode: CompletionMode; status: SubmissionStatus; submittedAt?: string; syncState: SyncState; }
 export interface SubmissionAnswer { id: EntityId; submissionId: EntityId; questionId: EntityId; valueText?: string; valueNumeric?: number; valueBoolean?: boolean; valueTextList?: string[]; }
-export interface SubmissionReview { id: EntityId; submissionId: EntityId; reviewerUserId?: EntityId; status: "pending" | "reviewed" | "action_required"; noteSummary?: string; reviewedAt?: string; }
+export interface SubmissionReview { id: EntityId; submissionId: EntityId; reviewerUserId?: EntityId; status: ReviewStatus; noteSummary?: string; reviewedAt?: string; }
+export interface SyncQueueItem<TPayload = Record<string, unknown>> { mutationId: EntityId; clientGeneratedId: EntityId; idempotencyKey: string; operation: string; payload: TPayload; state: SyncState; createdAt: string; }
 export interface SubmittedBy { actualSubmitterId: EntityId; completionMode: CompletionMode; }
 
 export interface RiskAssessment { id: EntityId; caseId: EntityId; level: RiskLevel; ruleSetVersion: string; explanationCode: string; requiresStaffReview: boolean; generatedAt: string; reviewedBy?: EntityId; reviewedAt?: string; }

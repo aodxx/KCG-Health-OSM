@@ -16,7 +16,7 @@ Phase 0 ยังคงเป็น Foundation only จึงเตรียม 
 | Synthetic role switcher | DONE | `client/src/data/mock/repository.ts`, `AppShell.tsx` |
 | Role shells 3 ฝั่ง | DONE | `VolunteerToday.tsx`, `StaffOverview.tsx`, `CitizenHome.tsx` |
 | Form-driven volunteer/staff shell copy | DONE | Volunteer assigned-form surface และ Staff form/audience/submission dashboard |
-| Route skeleton ไม่ชี้ 404 | DONE | routes ใน `client/src/App.tsx`, mobile screenshots และ `tests/app-shell.test.tsx` |
+| Route skeleton ไม่ชี้ 404 | DONE | routes ใน `client/src/App.tsx` ครบ staff forms/campaigns/submissions/households/volunteers, volunteer forms/households/people/sync และ citizen forms/submissions; `tests/app-shell.test.tsx` |
 | Shared status/sync/offline primitives | DONE | `client/src/components/field-primitives.tsx` |
 | Domain foundation for geography/responsibility | DONE | `client/src/domain/types.ts`, `client/src/data/repository.ts` |
 | FormDefinition/FormVersion/FormQuestion/FormField | DONE | `client/src/domain/types.ts` |
@@ -29,7 +29,7 @@ Phase 0 ยังคงเป็น Foundation only จึงเตรียม 
 | PWA manifest / service worker foundation | DONE | `client/public/manifest.webmanifest`, `client/public/sw.js` |
 | Lint / test / build scripts | DONE | `package.json`, final gates pass |
 | CI | DONE | `.github/workflows/ci.yml` |
-| Role navigation / mock / mobile / accessibility tests | DONE | `tests/app-shell.test.tsx`, `tests/phase0-foundation.test.ts`, `tests/phase0-product-direction.test.ts` |
+| Role navigation / mock / mobile / accessibility tests | DONE | `tests/app-shell.test.tsx`, `tests/phase0-foundation.test.ts`, `tests/phase0-product-direction.test.ts` — 30 tests ผ่าน |
 | `.env.example` ไม่มี secret | MISSING | ไม่พบไฟล์ และ environment-file editor ถูกป้องกันโดย workspace |
 | Form Builder UI เต็ม | OUT-OF-SCOPE / PHASE 1 | Phase 0 มี schema/types และ route skeleton เท่านั้น |
 | Campaign publish/recipient workflow เต็ม | OUT-OF-SCOPE / PHASE 1 | มี mock contracts/fixtures เท่านั้น |
@@ -70,7 +70,7 @@ Phase 0 ยังคงเป็น Foundation only จึงเตรียม 
 | `pnpm install --frozen-lockfile` | PASS |
 | `pnpm check` | PASS |
 | `pnpm lint` | PASS |
-| `pnpm test --run` | PASS — 3 files, 16 tests |
+| `pnpm test --run` | PASS — 3 files, 30 tests |
 | `pnpm build` | PASS — Vite build completed |
 | Mobile route screenshots | PASS — `/volunteer`, `/staff`, `/citizen` และ skeleton routes |
 | Runtime boundary scan | PASS — ไม่พบ Supabase/API/Google Sheets/Smart อสม. integration ใน active runtime |

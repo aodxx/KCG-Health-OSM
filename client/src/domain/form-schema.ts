@@ -9,7 +9,7 @@ export const validateFormQuestion = (question: FormQuestion): FormSchemaIssue[] 
   const issues: FormSchemaIssue[] = [];
   if (!question.label.trim()) issues.push({ code: "missing_label", questionId: question.id, message: "คำถามต้องมี label" });
   if (!FORM_QUESTION_TYPES.includes(question.type)) issues.push({ code: "unsupported_type", questionId: question.id, message: "ชนิดคำถามยังไม่รองรับ" });
-  if (["radio", "select", "checkbox"].includes(question.type) && (!question.options || question.options.length === 0)) issues.push({ code: "missing_option", questionId: question.id, message: "คำถามชนิดเลือกต้องมีตัวเลือก" });
+  if (["radio", "select", "checkbox", "single_choice", "multiple_choice"].includes(question.type) && (!question.options || question.options.length === 0)) issues.push({ code: "missing_option", questionId: question.id, message: "คำถามชนิดเลือกต้องมีตัวเลือก" });
   return issues;
 };
 

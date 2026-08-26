@@ -22,7 +22,7 @@ Repository ถูก sync source documents ล่าสุดจาก `aodxx/KC
 
 ## In Progress
 
-กำลังตรวจ repository structure, route coverage, runtime boundary, mobile/accessibility smoke และ quality gates ให้ตรงกับคำสั่ง Recovery ฉบับล่าสุด พร้อมเตรียม delivery branch บน GitHub
+กำลังปิด final delivery audit ของ Phase 0 หลังเติม route skeleton ครบทุก role, Form/ Campaign/Submission shared contracts และ test coverage ตามคำสั่งแนบ ล่าสุด quality gates ผ่านทั้งหมด
 
 ## Remaining
 
@@ -42,18 +42,18 @@ Repository ถูก sync source documents ล่าสุดจาก `aodxx/KC
 
 ## Latest Commit
 
-`abbe704a8550defa29a2ba9d46f4c99bb4d95de3` หลังเพิ่ม PROGRESS.md และ final recovery verification
+`7f0069d296bab17d3427ce8318fe93e2faf943a9` หลังเติม route skeleton, domain aliases และ shared foundation รอบล่าสุด
 
 ## Test Status
 
 - install: PASS — `pnpm install --frozen-lockfile`
 - check: PASS — `pnpm check`
 - lint: PASS — `pnpm lint`
-- test: PASS — 3 files / 16 tests
+- test: PASS — 3 files / 30 tests
 - build: PASS — `pnpm build`
 - routes/mobile: PASS — screenshots ตรวจ role shells และ skeleton routes
 - GitHub readback: PASS สำหรับ branch `recovery/product-direction-v0.2`
 
 ## Next Action
 
-ตรวจ final diff และ quality gates หลังเพิ่ม PROGRESS.md จากนั้น commit และ push branch ใหม่/เดิมให้ GitHub readback ตรงกับ workspace หาก blocker `.env.example` ยังแก้ไม่ได้ ให้รายงาน `PHASE 0 NOT READY` อย่างชัดเจนและหยุดโดยไม่เริ่ม Phase 1
+ตรวจ final diff และ quality gates หลัง route/domain/shared-foundation expansion จากนั้น commit และ push branch recovery ให้ GitHub readback ตรงกับ workspace หาก blocker `.env.example` ยังแก้ไม่ได้ ให้รายงาน `PHASE 0 NOT READY` อย่างชัดเจนและหยุดโดยไม่เริ่ม Phase 1

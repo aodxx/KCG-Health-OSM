@@ -1,6 +1,6 @@
 // Civic Field Notes: shared visual language for status, risk, sync, and field-note hierarchy.
-import { AlertTriangle, Check, ChevronRight, CloudOff, Clock3, ClipboardList, MapPin, RefreshCw, UserRound, Wifi } from "lucide-react";
-import type { RiskLevel, SyncState, TaskStatus } from "@/domain/types";
+import { AlertTriangle, Check, ChevronRight, CloudOff, Clock3, ClipboardList, FilePlus2, MapPin, RefreshCw, Send, UserRound, UsersRound, Wifi } from "lucide-react";
+import type { Campaign, FormDefinition, RiskLevel, SubmissionStatus, SyncState, TaskStatus } from "@/domain/types";
 import { cn } from "@/lib/utils";
 
 const riskMeta: Record<RiskLevel, { label: string; icon: typeof Check; className: string }> = {
@@ -63,6 +63,19 @@ export function PersonSummary({ person }: { person: import("@/domain/types").Per
 
 export function TaskCard({ task }: { task: import("@/domain/types").Task }) {
   return <article className="task-card"><span className="task-margin" aria-hidden="true">{task.id.slice(-2)}</span><div className="task-body"><div className="task-topline"><span className="task-type"><ClipboardList size={13} aria-hidden="true" />{task.type}</span><RiskBadge level={task.risk} /></div><h3>{task.title}</h3><p className="task-subject">{task.subject}</p><div className="task-footer"><TaskStatusBadge status={task.status} /><SyncStatusIndicator state={task.syncState} /></div></div></article>;
+}
+
+export function FormCard({ form }: { form: FormDefinition }) {
+  return <article className="paper-card"><div className="task-topline"><span className="task-type"><FilePlus2 size={14} aria-hidden="true" />แบบฟอร์ม</span><span className="status-stamp">{form.status === "published" ? "เผยแพร่แล้ว" : "ฉบับร่าง"}</span></div><h3>{form.name}</h3><p>{form.description}</p><span className="eyebrow">เวอร์ชัน {form.currentVersionId}</span></article>;
+}
+
+export function CampaignCard({ campaign }: { campaign: Campaign }) {
+  return <article className="paper-card"><div className="task-topline"><span className="task-type"><UsersRound size={14} aria-hidden="true" />กลุ่มเป้าหมาย</span><span className="status-stamp">{campaign.status}</span></div><h3>{campaign.name}</h3><p>{campaign.campaignType} · แบบฟอร์ม {campaign.formVersionId}</p><span className="eyebrow">{campaign.startDate} — {campaign.endDate}</span></article>;
+}
+
+export function SubmissionStatusBadge({ status }: { status: SubmissionStatus }) {
+  const labels: Record<SubmissionStatus, string> = { assigned: "มอบหมายแล้ว", in_progress: "กำลังกรอก", submitted: "ส่งแล้ว", requires_review: "รอตรวจ", reviewed: "ตรวจแล้ว", action_required: "ต้องดำเนินการ", completed: "เสร็จแล้ว" };
+  return <span className="status-stamp"><Send size={13} aria-hidden="true" />{labels[status]}</span>;
 }
 
 export function CaseTimelineItem({ event }: { event: import("@/domain/types").CaseEvent }) {

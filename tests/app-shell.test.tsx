@@ -37,4 +37,15 @@ describe("App shell", () => {
     expect(await screen.findByRole("heading", { name: expected })).toBeInTheDocument();
     expect(screen.queryByText("ไม่พบหน้านี้")).not.toBeInTheDocument();
   });
+
+  it.each([
+    "/staff/forms", "/staff/forms/new", "/staff/campaigns", "/staff/campaigns/CAMP001", "/staff/submissions/review", "/staff/households", "/staff/volunteers",
+    "/volunteer/households/HH0601", "/volunteer/people/P0601", "/volunteer/forms/FORM001", "/volunteer/sync",
+    "/citizen/forms", "/citizen/forms/FORM001", "/citizen/submissions",
+  ])("keeps required Phase 0 route %s out of 404", async (path) => {
+    window.history.pushState({}, "", path);
+    render(<App />);
+    expect(await screen.findByText("กำลังเตรียมพื้นที่นี้")).toBeInTheDocument();
+    expect(screen.queryByText("ไม่พบหน้านี้")).not.toBeInTheDocument();
+  });
 });
