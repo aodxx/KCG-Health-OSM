@@ -12,6 +12,24 @@ Implementation ปัจจุบันพัฒนาและตรวจส�
 
 ห้ามเริ่ม Phase 1 จนกว่า Phase 0 จะผ่าน exit criteria และเจ้าของโครงการอนุมัติอย่างชัดเจน
 
+## Frontend Hosting — FIXED DECISION
+
+Frontend ของโครงการนี้ต้องโฮสต์ด้วย **GitHub Pages** จาก repository `aodxx/KCG-Health-OSM` เป็นช่องทางมาตรฐานของหน้าเว็บ/PWA
+
+Expected public application path:
+`https://aodxx.github.io/KCG-Health-OSM/`
+
+ข้อกำหนด:
+- frontend build ต้องทำงานภายใต้ repository base path `/KCG-Health-OSM/`
+- asset URLs, manifest, service worker และ client-side navigation ต้องไม่สมมติว่าแอปอยู่ที่ domain root `/`
+- GitHub Actions ต้องมี deployment workflow สำหรับ GitHub Pages
+- หลัง deploy Agent ต้องตรวจ public URL/readback เอง ไม่ให้เจ้าของโครงการเป็น routine QA
+- routing ต้องรองรับการ refresh/deep navigation บน GitHub Pages ด้วย strategy ที่เหมาะกับ static hosting
+- GitHub Pages เป็น **static frontend hosting เท่านั้น**; backend/database/Auth ใน Phase 6+ ต้องแยกเป็นบริการ backend และเรียกผ่าน HTTPS API/SDK ที่ปลอดภัย
+- ห้ามเก็บ secrets หรือ privileged backend credentials ใน GitHub Pages frontend
+
+การเปลี่ยน frontend hosting หลักจาก GitHub Pages ต้องเป็น architecture decision ที่เจ้าของโครงการอนุมัติอย่างชัดเจน
+
 ## Source of Truth
 
 เมื่อเอกสารขัดกัน ให้ใช้ลำดับนี้:
@@ -51,6 +69,7 @@ Implementation ปัจจุบันพัฒนาและตรวจส�
 - Phase roadmap
 - repository/source structure
 - canonical logical database design
+- frontend hosting = GitHub Pages
 - agent workflow/gates
 
 หากมี requirement ใหม่ที่กระทบ architecture อย่างมีนัยสำคัญ ให้บันทึก ADR ก่อนเปลี่ยน canonical design แทนการสร้างเอกสารคู่ขนานใหม่
@@ -82,4 +101,4 @@ Smart อสม. integration ยังไม่ทำใน MVP; ระบบเ
 
 ## Agent Rule
 
-AI Agent ต้องตรวจ install/check/lint/test/build/routes/runtime/CI เอง แก้ failure เอง และ push งานกลับ GitHub ก่อนรายงานว่าส่งมอบแล้ว ห้ามใช้เจ้าของโครงการเป็น routine QA
+AI Agent ต้องตรวจ install/check/lint/test/build/routes/runtime/CI/GitHub Pages deployment เอง แก้ failure เอง และ push งานกลับ GitHub ก่อนรายงานว่าส่งมอบแล้ว ห้ามใช้เจ้าของโครงการเป็น routine QA
