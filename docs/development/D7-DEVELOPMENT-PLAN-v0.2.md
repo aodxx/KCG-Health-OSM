@@ -10,18 +10,23 @@
 1. `docs/product/PRODUCT-DEFINITION-v0.2.md`
 2. `PRD.md`
 3. `MASTER-ROADMAP.md`
-4. `AGENTS.md`
-5. `docs/development/AUTONOMOUS-AGENT-RULES.md`
-6. current phase checklist
-7. architecture documents
+4. `docs/architecture/DATABASE-DESIGN-v0.2.md`
+5. `AGENTS.md`
+6. `docs/development/AUTONOMOUS-AGENT-RULES.md`
+7. current phase checklist
+8. `docs/development/REPOSITORY-STRUCTURE.md`
+9. older architecture documents as historical/supporting references only
 
-D7 v0.1 และ blueprint เก่าที่ขัดกับรายการด้านบนเป็น historical reference เท่านั้น
+D7 v0.1, D5/D6 v0.1 database documents และ blueprint เก่าที่ขัดกับรายการด้านบนเป็น historical reference เท่านั้น
 
 ## 2. Product Core
 
 `Create Form → Define Audience → Publish → Route to Citizen/Volunteer → Complete → Submit → Review → Follow-up/Referral → Export-ready`
 
 ระบบต้องไม่ถูกออกแบบเป็น NCD-only, visit-only หรือ referral-only architecture
+
+Canonical data model:
+`docs/architecture/DATABASE-DESIGN-v0.2.md`
 
 ## 3. Delivery Phases
 
@@ -44,7 +49,7 @@ D7 v0.1 และ blueprint เก่าที่ขัดกับรายก�
 สร้าง action หลัง review โดยไม่ทำ diagnosis/full EMR
 
 ### Phase 6 — Backend + Authentication + Authorization
-เปลี่ยน mock repositories เป็น backend adapter จริง, auth, server-enforced permissions, RLS/equivalent และ audit storage
+แปลง canonical logical database design เป็น migration จริง, เปลี่ยน mock repositories เป็น backend adapter, ทำ auth, server-enforced permissions, RLS/equivalent และ audit storage
 
 ### Phase 7 — Production-grade Offline & Sync
 local persistence, queue, retry, idempotency, conflict policy และ safe device/session behavior
@@ -60,7 +65,19 @@ production deployment, monitoring, operational runbooks, backup/restore verifica
 
 รายละเอียด task/test/exit criteria ของแต่ละ Phase ใช้ `MASTER-ROADMAP.md` เป็นหลัก
 
-## 4. Engineering Rules
+## 4. Data Architecture Freeze
+
+สำหรับ Phase 0–5 ให้ยึด entity/invariant ใน `DATABASE-DESIGN-v0.2.md` เป็นฐานของ domain types และ repository interfaces โดยไม่สร้าง schema แข่งขันใหม่
+
+หากต้องเปลี่ยนโครงข้อมูลอย่างมีนัยสำคัญ:
+1. สร้าง ADR ใน `docs/decisions/`
+2. อธิบาย requirement ที่ canonical model รองรับไม่ได้
+3. ปรับ `DATABASE-DESIGN-v0.2.md` อย่างตั้งใจ
+4. ปรับ interfaces/tests ที่เกี่ยวข้อง
+
+ห้ามกลับไปใช้ `Visit / Observation / Case / RiskAssessment / NCD` เป็นแกนระบบเพียงเพราะมีในเอกสาร v0.1
+
+## 5. Engineering Rules
 
 - domain-first; UI ไม่ผูกกับ data source โดยตรง
 - repository abstraction ก่อน backend จริง
@@ -72,7 +89,7 @@ production deployment, monitoring, operational runbooks, backup/restore verifica
 - tests + lint + build + runtime/readback ต้องผ่านก่อนส่งมอบ
 - GitHub เป็น handoff point; local/workspace-only ไม่ถือว่าส่งมอบ
 
-## 5. Phase Gate
+## 6. Phase Gate
 
 AI Agent ห้ามข้าม Phase เอง
 
@@ -84,7 +101,7 @@ AI Agent ห้ามข้าม Phase เอง
 5. รายงาน `PHASE N PASS`
 6. เจ้าของโครงการอนุมัติ Phase ถัดไป
 
-## 6. Current Phase
+## 7. Current Phase
 
 Current phase: **Phase 0 Recovery — Repository & Frontend Foundation**
 
