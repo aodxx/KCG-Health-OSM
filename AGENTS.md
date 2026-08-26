@@ -16,13 +16,14 @@ Read in this order:
 2. `PRD.md`
 3. `MASTER-ROADMAP.md`
 4. `AGENTS.md`
-5. `docs/development/AUTONOMOUS-AGENT-RULES.md`
-6. `docs/development/PHASE-0-CHECKLIST.md`
-7. `docs/development/D7-DEVELOPMENT-PLAN-v0.2.md`
-8. `docs/development/REPOSITORY-STRUCTURE.md`
-9. architecture/data-model documents as supporting references
+5. `docs/architecture/DATABASE-DESIGN-v0.2.md`
+6. `docs/development/AUTONOMOUS-AGENT-RULES.md`
+7. `docs/development/PHASE-0-CHECKLIST.md`
+8. `docs/development/D7-DEVELOPMENT-PLAN-v0.2.md`
+9. `docs/development/REPOSITORY-STRUCTURE.md`
+10. remaining architecture/data-model documents as historical/supporting references only
 
-`D7-DEVELOPMENT-PLAN-v0.1.md` and older blueprint/workflow documents are historical references only when they conflict with Product Definition v0.2, PRD, or Master Roadmap.
+`D7-DEVELOPMENT-PLAN-v0.1.md`, D5/D6 v0.1 database documents and older blueprint/workflow documents are historical references when they conflict with Product Definition v0.2, PRD, Master Roadmap, or `DATABASE-DESIGN-v0.2.md`.
 
 ## Product Rules — Non-Negotiable
 - Staff/clinician starts MVP campaigns by creating/publishing forms.
@@ -34,6 +35,20 @@ Read in this order:
 - Hierarchy is first-class: service area → village → volunteer → household → person.
 - Staff dashboard supports completion/review tracking and drill-down through that hierarchy.
 - Smart อสม. integration is future work; structured export comes first.
+
+## Canonical Data Rules
+- `Person` and `UserAccount` are separate concepts.
+- `VolunteerAssignment` is the source of responsibility history; do not encode responsibility only as `household.volunteer_id`.
+- Published `FormVersion` is immutable.
+- A published campaign references a published immutable `FormVersion`.
+- Audience resolution materializes `CampaignRecipient` before data collection.
+- Every submission records subject person and actual submitter.
+- Proxy submission requires active authorized assignment/scope.
+- Offline/server mutations use client UUID + idempotency key.
+- Core schema must not embed production clinical thresholds.
+- Phase 0–5 use domain/repository/mock layers; real database/Auth begins only in Phase 6 after explicit approval.
+
+Canonical data model: `docs/architecture/DATABASE-DESIGN-v0.2.md`.
 
 ## Safety & Data Rules
 - Use synthetic/mock data until Pilot/Security gate explicitly allows real data.
@@ -82,7 +97,7 @@ Not allowed:
 
 ## Engineering Workflow
 For every implementation task:
-1. sync current GitHub branch
+1. sync current GitHub branch and current `main` control documents
 2. inspect docs/code/diff
 3. confirm current phase and scope
 4. implement coherent change
