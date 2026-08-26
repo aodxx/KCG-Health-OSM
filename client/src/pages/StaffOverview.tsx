@@ -1,16 +1,17 @@
-// Civic Field Notes: staff view prioritizes triage signals and coordination, not full clinical records.
-import { ArrowRight, CheckCircle2, ClipboardList, Clock3, ShieldAlert } from "lucide-react";
-import { getCases } from "@/data/mock/repository";
-import { RiskBadge, VillageLabel } from "@/components/field-primitives";
+// Civic Field Notes: Phase 0 staff shell exposes form, audience, submission, and responsibility surfaces only.
+import { ArrowRight, CheckCircle2, Clock3, FilePlus2, UsersRound } from "lucide-react";
+import { useLocation } from "wouter";
+import { campaignRecipients, formDefinitions, submissions } from "@/data/mock/form-repository";
+import { VillageLabel } from "@/components/field-primitives";
 
 export default function StaffOverview() {
-  const cases = getCases();
-  return <section className="page-stack"><header className="page-heading"><div><p className="eyebrow">ภาพรวมการประสานงาน · 27 สิงหาคม 2569</p><h1>เห็นสัญญาณก่อน งานค้าง</h1><p className="lede">รพ.สต.บ้านโคกชะงาย · ข้อมูลสาธิตจากพื้นที่จำลอง</p></div><div className="header-stamp"><ShieldAlert size={18} /><span>มี 1 เคสต้องตรวจ</span></div></header>
-    <div className="metric-row staff-metrics"><div className="metric-card metric-alert"><span>ต้องตรวจวันนี้</span><strong>01</strong><small>เคสเร่งด่วน</small></div><div className="metric-card"><span>งานรอตรวจ</span><strong>07</strong><small>จาก 2 หน่วยบริการ</small></div><div className="metric-card"><span>ติดตามอยู่</span><strong>12</strong><small>เคสที่ยังเปิด</small></div></div>
-    <div className="triage-callout"><div className="callout-icon"><ShieldAlert size={22} /></div><div><strong>มีผลคัดกรองที่ต้องให้เจ้าหน้าที่ตรวจ</strong><p>ข้อมูลนี้เป็น observation จากการลงพื้นที่ ไม่ใช่การวินิจฉัยโรค</p></div><button className="dark-action">เปิด triage <ArrowRight size={16} /></button></div>
-    <div className="section-heading"><div><span className="section-index">01 / Triage inbox</span><h2>เคสที่ต้องขยับต่อ</h2></div><button className="text-button">ดูเคสทั้งหมด <ArrowRight size={16} /></button></div>
-    <div className="case-list">{cases.map((item) => <article className="case-row" key={item.id}><div className="case-signal"><RiskBadge level={item.risk} /><span>{item.id}</span></div><div className="case-detail"><strong>{item.personName}</strong><VillageLabel>{item.village}</VillageLabel><p>{item.lastEvent}</p></div><div className="case-next"><span>ขั้นถัดไป</span><strong>{item.nextAction}</strong></div><button className="round-arrow" aria-label={`เปิดเคส ${item.id}`}><ArrowRight size={18} /></button></article>)}</div>
-    <div className="section-heading compact"><div><span className="section-index">02 / Coverage</span><h2>ภาพรวมงานวันนี้</h2></div></div>
-    <div className="coverage-panel"><div className="coverage-line"><span>งานที่มอบหมาย</span><strong>24 / 31</strong></div><div className="progress-track"><span style={{ width: "77%" }} /></div><div className="coverage-meta"><span><CheckCircle2 size={15} />เสร็จแล้ว 18</span><span><Clock3 size={15} />กำลังทำ 6</span><span><ClipboardList size={15} />รอเริ่ม 7</span></div></div>
+  const [, navigate] = useLocation();
+  return <section className="page-stack"><header className="page-heading"><div><p className="eyebrow">ศูนย์จัดการแบบฟอร์ม · 27 สิงหาคม 2569</p><h1>ออกแบบงานให้ชุมชน</h1><p className="lede">รพ.สต.บ้านโคกชะงาย · ข้อมูลสาธิตจากพื้นที่จำลอง</p></div><div className="header-stamp"><FilePlus2 size={18} /><span>แบบฟอร์มเผยแพร่ 01</span></div></header>
+    <div className="metric-row staff-metrics"><div className="metric-card metric-primary"><span>ผู้รับแบบฟอร์ม</span><strong>{String(campaignRecipients.length).padStart(2, "0")}</strong><small>จากกลุ่มเป้าหมายจำลอง</small></div><div className="metric-card"><span>ส่งคำตอบแล้ว</span><strong>{String(submissions.length).padStart(2, "0")}</strong><small>พร้อมตรวจสอบ</small></div><div className="metric-card"><span>ยังไม่กรอก</span><strong>01</strong><small>ต้องติดตามสถานะ</small></div></div>
+    <div className="triage-callout"><div className="callout-icon"><FilePlus2 size={22} /></div><div><strong>สร้างแบบฟอร์มจากคำถามที่ทีมกำหนด</strong><p>เลือกชนิดคำถาม ตัวเลือก และกติกาการตรวจได้ในโครงสร้างแบบจำลอง</p></div><button className="dark-action" onClick={() => navigate("/staff/tasks")}>เปิดพื้นที่สร้าง <ArrowRight size={16} /></button></div>
+    <div className="section-heading"><div><span className="section-index">01 / Form library</span><h2>แบบฟอร์มของหน่วยบริการ</h2></div><button className="text-button" onClick={() => navigate("/staff/tasks")}>ดูทั้งหมด <ArrowRight size={16} /></button></div>
+    <div className="case-list">{formDefinitions.map((form) => <article className="case-row" key={form.id}><div className="case-signal"><FilePlus2 size={20} /><span>{form.id}</span></div><div className="case-detail"><strong>{form.name}</strong><VillageLabel>เจ้าของแบบฟอร์ม · เจ้าหน้าที่จำลอง</VillageLabel><p>{form.description}</p></div><div className="case-next"><span>สถานะ</span><strong>เผยแพร่แล้ว · v1</strong></div><button className="round-arrow" aria-label={`เปิดแบบฟอร์ม ${form.id}`} onClick={() => navigate("/staff/tasks")}><ArrowRight size={18} /></button></article>)}</div>
+    <div className="section-heading compact"><div><span className="section-index">02 / Audience & submission</span><h2>ความคืบหน้าภารกิจ</h2></div></div>
+    <div className="coverage-panel"><div className="coverage-line"><span>ส่งแบบฟอร์มแล้ว</span><strong>{submissions.length} / {campaignRecipients.length}</strong></div><div className="progress-track"><span style={{ width: `${Math.round((submissions.length / campaignRecipients.length) * 100)}%` }} /></div><div className="coverage-meta"><span><CheckCircle2 size={15} />ส่งแล้ว {submissions.length}</span><span><Clock3 size={15} />รอตรวจ 0</span><span><UsersRound size={15} />ยังไม่กรอก {campaignRecipients.length - submissions.length}</span></div></div>
   </section>;
 }

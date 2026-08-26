@@ -1,319 +1,298 @@
-# KCG Health OSM — Product Requirements Document v0.1
+# KCG Health OSM — Product Requirements Document v0.2
 
-สถานะ: Working PRD
-วันที่: 2026-08-26
+สถานะ: Working PRD — Product Direction Re-aligned
+วันที่: 2026-08-27
+
+> Product source of truth: `docs/product/PRODUCT-DEFINITION-v0.2.md`
 
 ## 1. Product Vision
-KCG Health OSM คือ **ระบบจัดการงานภาคสนามและประสานการดูแลระหว่าง ครัวเรือน ↔ อสม. ↔ เจ้าหน้าที่สาธารณสุข/แพทย์** สำหรับตำบลโคกชะงาย อำเภอเมืองพัทลุง จังหวัดพัทลุง
+KCG Health OSM คือ **ระบบออกแบบ กระจาย กรอก ตรวจ และติดตามแบบคัดกรองสุขภาพระดับชุมชน** สำหรับตำบลโคกชะงาย โดยเชื่อม:
 
-ระบบนี้ไม่ใช่ระบบรายงาน อสม. แทนของรัฐ และไม่ใช่ระบบเวชระเบียนทดแทน Smart อสม., HDC หรือ HIS
+`แพทย์/เจ้าหน้าที่ รพ.สต. ↔ อสม. ↔ ครัวเรือน/ประชาชน`
 
-## 2. Problem Statement
-งานสุขภาพชุมชนระดับตำบลมีหลายกิจกรรมที่ต้องพึ่งการมอบหมายงาน การลงพื้นที่ การจดบันทึก การติดตาม และการประสานระหว่างหลายฝ่าย ปัญหาหลักที่ระบบนี้ต้องแก้คือ:
-- งานกระจายผ่านหลายช่องทาง เช่น การประชุม โทรศัพท์ LINE หรือเอกสาร
-- อสม. ต้องติดตามหลายครัวเรือนและหลายภารกิจพร้อมกัน
-- เจ้าหน้าที่มองเห็นเคสเสี่ยงและงานค้างได้ยากเมื่อข้อมูลกระจัดกระจาย
-- การส่งต่อและติดตามผลไม่มี timeline กลางที่อ่านง่าย
-- งานภาคสนามอาจอยู่ในพื้นที่สัญญาณอินเทอร์เน็ตไม่เสถียร
-- ข้อมูลสุขภาพมีความอ่อนไหวและต้องควบคุมสิทธิ์อย่างละเอียด
+ระบบนี้ไม่แทน Smart อสม., HDC, HIS หรือเวชระเบียน แต่ช่วยให้งานคัดกรองเป็นระบบ ติดตามได้ และเตรียมข้อมูลให้พร้อมใช้ต่อกับระบบทางการในภายหลัง
 
-## 3. Product Boundary
+## 2. Product Boundary
 ### ระบบต้องทำ
-- มอบหมายและติดตาม task ภาคสนาม
-- แสดงครัวเรือน/บุคคลที่ อสม. รับผิดชอบ
-- บันทึก visit และ observation
-- ประเมิน workflow risk state โดยไม่วินิจฉัยโรค
-- แจ้ง red flag ให้เจ้าหน้าที่ตรวจ
-- ส่งต่อและติดตาม follow-up
-- แสดง dashboard ตาม role และพื้นที่
-- รองรับ offline queue
-- เก็บ audit trail
-- export สรุปข้อมูลเพื่อช่วยงานรายงานทางการ
+- แพทย์/เจ้าหน้าที่สร้างแบบฟอร์มคัดกรองเองได้
+- เลือกผู้รับรายบุคคล รายครัวเรือน รายหมู่บ้าน หรือกลุ่มตามเงื่อนไข
+- ประชาชนกรอกเองได้เมื่อใช้งานมือถือได้
+- อสม.กรอกแทนประชาชนในครัวเรือนที่รับผิดชอบได้
+- เก็บว่าใครเป็นผู้ถูกคัดกรอง ใครเป็นผู้กรอก และกรอกแทนหรือกรอกเอง
+- แสดงโครงสร้าง หมู่บ้าน → อสม. → ครัวเรือน → สมาชิก
+- ให้เจ้าหน้าที่/ผู้ประสานกำหนดสายรับผิดชอบของ อสม.
+- รับข้อมูลตั้งต้นผ่าน import/กรอก แล้วให้อสม.ช่วยตรวจและเติมข้อมูล
+- ให้แพทย์กำหนดว่าแบบฟอร์มใดต้องตรวจทุกชุด หรือคัดเฉพาะรายการที่เข้าเงื่อนไข
+- Dashboard ติดตามกรอกแล้ว/ยังไม่กรอก/ต้องตรวจ และ drill down ตามพื้นที่/อสม./ครัวเรือน/บุคคล
+- หลังตรวจ สามารถสร้างงานติดตาม นัดหมาย ส่งต่อ หรือปิดงาน
+- เตรียมข้อมูลให้อยู่ในโครงสร้างที่ export/mapping ไป Smart อสม. หรือระบบทางการภายหลังได้
+- audit และควบคุมสิทธิ์ตาม role/scope/assignment
 
-### ระบบไม่ทำ
+### ระบบไม่ทำใน MVP
 - ไม่แทน Smart อสม.
-- ไม่แทน HDC/HIS/EMR
-- ไม่จ่ายค่าป่วยการ อสม.
-- ไม่ scrape หรือกรอกระบบรัฐอัตโนมัติโดยไม่ได้รับอนุญาต
-- ไม่เก็บข้อมูลสุขภาพที่ไม่จำเป็นต่อ workflow
-- ไม่ให้ AI วินิจฉัยโรคอัตโนมัติ
+- ไม่ scrape/auto-fill ระบบรัฐโดยไม่ได้รับอนุญาต
+- ไม่เป็น full EMR/HIS
+- ไม่วินิจฉัยโรคอัตโนมัติ
+- ไม่เป็นระบบค่าป่วยการ
+- ไม่ล็อกไว้กับแบบฟอร์ม NCD เพียงแบบเดียว
+- ไม่ใช้ “เยี่ยมบ้านทั่วไป” เป็นแกนหลักของ MVP
 
-## 4. Area Baseline
-Working baseline:
-- 9 หมู่บ้าน
-- รพ.สต.บ้านทุ่งยาว: หมู่ 1, 7, 9
-- รพ.สต.บ้านโคกชะงาย: หมู่ 2, 3, 4, 5, 6, 8
-
-ต้องยืนยัน master data ล่าสุดก่อน production
-
-## 5. Primary Users
-1. ประชาชน/สมาชิกครัวเรือน
+## 3. Primary Users
+1. แพทย์/เจ้าหน้าที่ รพ.สต.
 2. อสม.
-3. ประธาน อสม./ผู้ประสานงาน
-4. เจ้าหน้าที่สาธารณสุข/รพ.สต.
-5. แพทย์/ผู้ประกอบวิชาชีพ
-6. System Admin
+3. ประชาชน
+4. ประธาน อสม./ผู้ประสานงาน
+5. System Admin
 
-## 6. Core Workflow
-Workflow มาตรฐานของระบบ:
+## 4. Who Starts Work
+ใน MVP งานเริ่มโดย **แพทย์/เจ้าหน้าที่** ผ่านการสร้างและเผยแพร่แบบคัดกรอง/ภารกิจ
 
-`Target → Task → Observation → Risk → Action → Referral → Follow-up → Closure`
+ประชาชนและ อสม.เป็นผู้รับ/ผู้กรอกตาม assignment และสิทธิ์ ไม่ใช่ผู้สร้าง campaign หลัก
 
-MVP แรกพิสูจน์วงจร:
+## 5. Core Workflow
+`Create Form → Define Audience → Publish → Route to Citizen/Volunteer → Complete Form → Submit → Review Rules → Staff Review → Follow-up/Referral/Complete → Export-ready`
 
-`Assigned household/person → Home visit → NCD screening → Risk result → Staff review → Referral/Follow-up → Close`
-
-## 7. MVP Scope
-### 7.1 Volunteer workflow
-- Today dashboard
-- Task list
-- Household list/detail
-- Person summary
-- Start home visit
-- NCD screening form
-- Risk result
-- Ask staff / referral
-- Offline draft/sync state
-
-### 7.2 Staff workflow
-- Operational dashboard
-- Triage inbox
-- Case detail
-- Assignment composer
-- Review submitted data
-- Create follow-up task
-
-### 7.3 Citizen workflow
-- Home
-- Appointment/follow-up
-- Confirm appointment
-- Request help / report symptom placeholder for later MVP extension
-
-## 8. NCD Screening MVP
-Mock/prototype fields:
+## 6. Form Builder
+แพทย์/เจ้าหน้าที่สร้างแบบฟอร์มได้แบบยืดหยุ่น รองรับอย่างน้อย:
+- short/long text
+- number
+- checkbox
+- radio
+- dropdown
 - date/time
-- systolic/diastolic blood pressure
-- optional capillary glucose
-- weight / height / waist when applicable
-- risk factor checklist
-- symptoms/red flags
-- short note
+- yes/no
+- single/multiple choice
+- required/optional
 
-System behavior:
-- numeric validation
-- autosave draft
-- risk state: Normal / Watch / Needs review / Urgent
-- abnormal values show “ต้องให้เจ้าหน้าที่ตรวจ”
-- no diagnostic wording
+ต้องรองรับ:
+- เพิ่ม/ลบ/เรียงคำถาม
+- แก้ตัวเลือก
+- preview
+- publish
+- versioning หลังเผยแพร่เพื่อไม่ทำลายคำตอบเดิม
 
-## 9. Roles and Access
+## 7. Audience Targeting
+ผู้ส่งเลือกผู้รับได้แบบ:
+- รายบุคคล
+- รายครัวเรือน
+- รายหมู่บ้าน/พื้นที่
+- ตามเงื่อนไขจาก master data เช่น อายุหรือกลุ่มเสี่ยง
+
+ก่อน publish ระบบต้อง resolve กลุ่มเป้าหมายออกมาเป็นรายการบุคคลที่ติดตามสถานะได้
+
+## 8. Geography & Responsibility Model
+โครงสร้างหลัก:
+
+`ตำบล → หน่วยบริการ → หมู่บ้าน → อสม. → ครัวเรือน → สมาชิก`
+
+อสม.แต่ละคนมี household assignments จริง และระบบต้องรู้ว่าประชาชนแต่ละคนอยู่ภายใต้ความรับผิดชอบของ อสม.คนใด
+
+ผู้กำหนด assignment ได้:
+- แพทย์/เจ้าหน้าที่
+- ประธาน อสม./ผู้ประสาน
+
+## 9. Initial Master Data
+ใช้แนวทางผสม:
+1. เจ้าหน้าที่/แอดมิน import หรือกรอกข้อมูลตั้งต้น
+2. อสม.ตรวจ แก้ และเพิ่มครัวเรือน/สมาชิกที่ตกหล่นในพื้นที่รับผิดชอบ
+
+การแก้ master data ต้องมี permission และ audit trail
+
+## 10. Citizen Completion Modes
+### กรอกเอง
+ประชาชนที่ใช้มือถือได้ เข้าแอปหรือผ่านวิธีรับรองตัวตน/ลิงก์ที่ระบบอนุญาต แล้วกรอกเอง
+
+### อสม.กรอกแทน
+ประชาชนที่ใช้มือถือไม่คล่อง ให้ อสม.ที่รับผิดชอบกรอกแทน
+
+ทุก submission ต้องเก็บ:
+- target person
+- actual submitter
+- completion mode: self / proxy-by-volunteer
+- form version
+- timestamp
+
+## 11. Citizen Access Architecture
+ระบบต้องเปิดทางรองรับหลายวิธี:
+- OTP เบอร์โทร
+- บัญชีใช้งานต่อเนื่อง
+- personal link/QR สำหรับภารกิจเฉพาะ
+- proxy completion โดย อสม.
+
+MVP ไม่จำเป็นต้องเปิดทุกวิธีพร้อมกัน
+
+## 12. Review Policy
+แพทย์กำหนดต่อแบบฟอร์มได้ว่า:
+- review ทุก submission
+หรือ
+- auto-accept รายการทั่วไปและส่งเฉพาะรายการที่เข้า rule มาให้ตรวจ
+
+สถานะขั้นต่ำ:
+`assigned → in_progress → submitted → requires_review/reviewed → action_required → completed`
+
+## 13. Staff Dashboard
+ต้องเห็น:
+- จำนวนผู้รับทั้งหมด
+- กรอกแล้ว/ยังไม่กรอก
+- requires review
+- งานค้าง
+- progress ตาม หมู่บ้าน → อสม. → ครัวเรือน → ประชาชน
+- drill-down ตามสิทธิ์
+
+## 14. Follow-up Actions
+หลังตรวจ แพทย์/เจ้าหน้าที่สามารถ:
+- มอบหมาย อสม.ติดตาม/วัดซ้ำ
+- นัดประชาชนมาที่ รพ.สต.
+- ส่งต่อหน่วยบริการอื่น
+- บันทึกว่าจัดการแล้ว/ปิดงาน
+
+เกณฑ์เชิงคลินิกต้องได้รับการยืนยันจากบุคลากรสุขภาพก่อน production
+
+## 15. Smart อสม. Boundary
+MVP ยังไม่สร้าง integration อัตโนมัติ
+
+ระบบต้องเตรียม submission/export model ให้สามารถ mapping ไปยังรูปแบบ Smart อสม. หรือระบบภายนอกภายหลังได้ เมื่อทราบช่องทางที่ได้รับอนุญาตจริง
+
+## 16. Roles & Access
 ### Citizen
-- own/authorized household scope only
+- เห็น/กรอกเฉพาะงานและข้อมูลของตนเองหรือที่ได้รับอนุญาต
 
 ### Volunteer
-- assigned household/person scope only
-- may create visit/observation for assigned tasks
+- เห็นเฉพาะครัวเรือน/บุคคลที่มี active assignment
+- กรอกแทนได้เฉพาะบุคคลในขอบเขตที่รับผิดชอบ
 
 ### Coordinator
-- workload, coverage, task status
-- limited clinical detail
+- จัด assignment อสม.↔ครัวเรือน
+- ดู coverage/workload
+- ไม่ได้สิทธิ์ clinical detail อัตโนมัติ
 
-### Staff
-- service-unit scoped cases/tasks
-- review, triage, assign, referral, follow-up
-
-### Clinician
-- explicitly referred/care-scope cases only
+### Staff/Clinician
+- สร้าง form/campaign
+- target audience
+- review submissions
+- follow-up/referral
+- ดูตาม service-unit scope
 
 ### Admin
-- system/account/geography metadata
-- no automatic clinical read access
+- จัด account/geography/system metadata
+- ไม่มี clinical read access อัตโนมัติ
 
-## 10. UX Requirements
-- Thai language first
+## 17. UX Requirements
+- Thai-first
 - Android mobile-first PWA
-- task-first home screen
-- risk-first prioritization
-- one-hand operation
-- touch targets ~44px+
-- large readable Thai typography
-- every state uses icon/text in addition to color
-- visible online/offline/sync status
-- household-centered navigation
+- Form Builder ฝั่งเจ้าหน้าที่ต้องใช้ง่าย ไม่ต้องเขียนโค้ด
+- ฝั่งประชาชนต้องกรอกง่ายที่สุด
+- ฝั่ง อสม.ต้องเห็นครัวเรือนในความรับผิดชอบและงานที่ยังค้าง
+- status ต้องใช้ text/icon ไม่พึ่งสีอย่างเดียว
+- visible online/offline/sync state
+- touch target ~44px+
 
-## 11. Navigation MVP
-### อสม.
-วันนี้ / ครัวเรือน / งาน / แจ้งเตือน / โปรไฟล์
-
-### เจ้าหน้าที่/แพทย์
-ภาพรวม / เคส / งาน / พื้นที่ / โปรไฟล์
-
-### ประชาชน
-หน้าแรก / นัดหมาย / การติดตาม / ข้อความ / โปรไฟล์
-
-## 12. Data Architecture
-Core entities:
+## 18. Data Architecture — Core Entities
 - ServiceUnit
 - Village
 - Household
 - Person
 - HouseholdMembership
+- Volunteer
+- VolunteerAssignment
 - UserAccount
 - UserRole
 - RoleScope
-- Volunteer
-- VolunteerAssignment
+- FormTemplate
+- FormVersion
+- FormField
 - Campaign
-- Task
-- TaskAssignment
-- Visit
-- Observation
-- RiskAssessment
-- Alert
-- Case
-- Review
-- Referral
+- AudienceRule
+- CampaignRecipient
+- Submission
+- SubmissionAnswer
+- SubmissionReview
 - FollowUp
-- CaseEvent
+- Referral
+- Appointment
+- ExportJob
 - Consent
 - AuditEvent
 
 Key decisions:
 - Person ≠ UserAccount
-- Case is coordination record, not full medical record
-- Observation stores field values, not diagnosis
-- RiskAssessment stores rule result separately from raw observation
+- FormVersion immutable after publish
+- Submission stores provenance of self/proxy completion
+- CampaignRecipient materializes target resolution for traceability
 
-## 13. Security & Privacy Requirements
+## 19. Offline Requirements
+MVP architecture should support offline queue for field completion by อสม. where appropriate
+
+Each mutation requires client-generated id / idempotency key
+
+Do not enable sensitive offline persistence in production until whitelist and device policy are approved
+
+## 20. Security & Privacy
 - least privilege
-- RLS on exposed tables
-- role + scope + assignment authorization
-- never rely on user-editable metadata for authorization
-- service-role/secret keys never exposed to client
-- audit sensitive reads/writes where appropriate
-- privacy-by-design overview screens
+- RLS/server authorization when backend begins
+- role + service-unit scope + active household assignment
+- no secret/service-role key in frontend
+- audit sensitive writes/changes
 - data minimization
-- retention policy per data class
-- offline storage whitelist before production
+- retention/deletion policy before production
+- no real personal/health data in public GitHub
 
-Data classification:
-1. Operational
-2. Personal
-3. Sensitive Health
-4. Highly Restricted
+## 21. Synthetic Test Dataset
+Development/test uses synthetic data only
 
-## 14. Offline Requirements
-Must support local queue for:
-- visit draft
-- observation
-- task status change
-- short note
-
-Each mutation requires idempotency key.
-
-Conflict behavior:
-- observations append rather than overwrite
-- task status uses version/concurrency check
-- demographic conflict requires review/merge
-
-## 15. Audit Requirements
-Audit must capture at minimum:
-- actor
-- action
-- resource type/id
-- timestamp
-- scope/service unit
-- success/failure
-- context/reason for sensitive access where required
-
-Client must not be able to edit audit history.
-
-## 16. Synthetic Test Dataset
-Development/test should use synthetic data only until production governance is approved.
-
-Recommended MVP dataset:
+Recommended structure:
 - 2 service units
 - 9 villages
-- 27 households
-- ~70 fictional persons
-- 9 fictional volunteers
-- 2 staff
-- 1 clinician
-- 1 coordinator
-- 1 admin
-- 30-50 tasks
-- 10-20 active cases
+- multiple volunteers per village
+- 3+ households per volunteer for prototype testing
+- fictional household members
+- multiple form templates
+- campaign recipients covering both self-completion and proxy-completion paths
 
-## 17. Non-functional Requirements
-- responsive Android-first UI
-- PWA installable architecture
-- resilient to intermittent network
-- clear loading/error/empty states
-- accessibility-aware typography and contrast
-- no sensitive data in logs/client analytics
-- production backup/recovery plan before launch
+## 22. MVP Success Criteria
+MVP succeeds when:
+1. staff creates a custom form without code
+2. staff targets recipients by person/household/village/condition
+3. one citizen completes assigned form directly
+4. one volunteer completes the same type of form on behalf of an assigned citizen
+5. submissions preserve person/household/volunteer/form-version provenance
+6. staff dashboard shows completion and review status by hierarchy
+7. staff can create follow-up/referral from a submission
+8. unauthorized volunteer cannot access another volunteer's households
+9. export produces structured data ready for future mapping
+10. no real health data is needed to demonstrate the MVP
 
-## 18. Integrations
-### MVP
-No external integration required beyond chosen application backend.
+## 23. Phase 0 Direction
+Phase 0 is **Foundation only**. It must prepare the application for this product definition, not implement the full workflow yet.
 
-### Later
-Potential adapters:
-- official reporting export
-- approved government APIs where available
-- notification providers
-- Google Drive/Sheets export for non-sensitive summaries if governance permits
+Foundation must prioritize:
+- role shells
+- geography/household/responsibility domain types
+- form schema/types
+- campaign/recipient/submission interfaces
+- mock repositories
+- route skeletons
+- PWA/test/CI foundation
 
-Do not build unofficial scraping integration.
+Existing Lovable NCD/home-visit prototype code is reference/salvage material only and must not dictate product architecture.
 
-## 19. Proposed Technical Direction
-Target direction, not yet production-locked:
-- Frontend: TypeScript PWA, mobile-first
-- Backend: Supabase PostgreSQL/Auth/Storage with RLS
-- Offline: client queue + idempotent sync
-- GitHub: source, migrations, docs
-- Google Drive: source/reference documents
-- Lovable: optional prototype/design tool, not source of truth
-
-## 20. Success Criteria for MVP
-MVP is successful when:
-1. volunteer can complete assigned NCD home-visit flow end-to-end
-2. urgent mock case appears in staff triage without exposing unrelated households
-3. staff can create follow-up and volunteer sees it
-4. citizen can view/confirm own follow-up only
-5. cross-village unauthorized access tests fail correctly
-6. offline retry does not duplicate observations
-7. audit events are generated for sensitive workflow actions
-8. no real personal/health data is needed to demonstrate the system
-
-## 21. Out of Scope for MVP
-- full EMR
-- medication management
-- lab integration
-- automated diagnosis
-- payments/benefits
-- full Smart อสม. replacement
-- complete LTC module
-- dengue module
-- campaign builder UI
-- advanced analytics/AI
-
-## 22. Open Decisions Before Production
-- person identifier strategy
-- authentication method for citizens/volunteers
-- legal basis/consent matrix per workflow
-- exact NCD observation/risk rules approved by health personnel
+## 24. Open Decisions Before Production
+- exact citizen authentication methods to enable first
+- source/format of initial population import
+- official mapping/export requirements for Smart อสม.
+- consent/legal basis matrix
+- approved clinical review/risk rules
 - retention periods
-- precise household geolocation policy
 - allowed offline sensitive fields
-- external referral model
-- production ownership and incident response
+- production incident response/ownership
 
-## 23. Source Documents
-Detailed discovery and architecture remain authoritative supporting documents under:
+## 25. Supporting Documents
+Authoritative product definition:
+- `docs/product/PRODUCT-DEFINITION-v0.2.md`
+
+Supporting discovery/architecture:
 - `docs/discovery/`
 - `docs/blueprint/`
 - `docs/architecture/`
-- `docs/prototype/`
 
-PRD summarizes those decisions and should be updated when lower-level architecture changes are approved.
+Older workflow documents that conflict with Product Definition v0.2 should be treated as historical design input, not current product authority.

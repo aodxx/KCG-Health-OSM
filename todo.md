@@ -1,34 +1,38 @@
-# Phase 0 Recovery / Foundation Reset TODO
+# Product Direction Sync + Phase 0 Recovery TODO
 
-## Source of Truth and audit
+## GitHub synchronization
 
-- [x] อ่าน PRD.md, AGENTS.md, Phase 0 checklist, D7 plan และ D5–D6 architecture
-- [x] ตรวจ implementation จริงทั้งหมดและจำแนก DONE / PARTIAL / MISSING / OUT-OF-SCOPE
-- [x] จัดทำ gap analysis ที่อ้างอิงไฟล์และ acceptance criteria
+- [ ] ตรวจ remote, branch และ local diff ก่อน sync
+- [ ] fetch/pull `aodxx/KCG-Health-OSM` branch `main`
+- [ ] preserve local changes ที่ใช้ต่อได้และตรวจ merge/conflict
+- [ ] ยืนยันไฟล์ Product Definition และ Source of Truth ใหม่หลัง sync
 
-## Foundation only
+## Source of Truth audit
 
-- [ ] ตรวจและเติม env example โดยไม่มี secret
-- [x] ตรวจ scripts สำหรับ fresh install, lint, test และ production build
-- [x] ตรวจ PWA manifest และ service worker foundation
-- [x] ตรวจ domain types/constants, repository/data adapter interfaces
-- [x] ตรวจ offline queue interface และ UUID/idempotency model
-- [x] ตรวจ role navigation tests, mock repository tests, mobile smoke tests และ accessibility basics
-- [x] เก็บ app shell, mock data, role switcher และ shared components ที่ใช้ต่อได้
-- [x] พัก implementation ของ Phase 1 โดยไม่เพิ่ม workflow หรือ business logic ใหม่
+- [ ] อ่าน `docs/product/PRODUCT-DEFINITION-v0.2.md`
+- [ ] อ่าน `PRD.md`, `AGENTS.md`, Phase 0 checklist และ `AUTONOMOUS-AGENT-RULES.md`
+- [ ] อ่าน architecture D5–D6 ที่เกี่ยวข้อง
+- [ ] ทำ gap analysis ใหม่ตาม Product Definition/PRD ล่าสุด
+- [ ] จำแนกโค้ดเดิม KEEP / REFACTOR / PARK
 
-## Route and boundary verification
+## Phase 0 foundation only
 
-- [x] ตรวจ route skeleton ของ อสม. / เจ้าหน้าที่ / ประชาชน ไม่ชี้ไป 404
-- [x] ตรวจว่าไม่มี Supabase, API, Google Sheets หรือ backend connection
-- [x] ตรวจว่าไม่มี secret และไม่มี real health/PII data
-- [x] ตรวจ repository structure และไฟล์ generated ที่ไม่ควร commit
+- [ ] ปรับ FormDefinition / FormVersion / FormQuestion contracts
+- [ ] ปรับ Campaign / AudienceSelection contracts
+- [ ] ปรับ Household / HouseholdMember / VolunteerAssignment contracts
+- [ ] ปรับ Submission / SubmissionAnswer / SubmittedBy contracts
+- [ ] ตรวจ repository interfaces, mock repositories, synthetic seed data
+- [ ] ตรวจ offline queue, UUID/idempotency, PWA, role shells และ route skeleton
+- [ ] ห้ามนำ NCD/Visit/Referral workflow กลับเข้า runtime
+- [ ] ห้ามเชื่อม backend, API, Smart อสม. หรือ external integration
 
-## Final gates
+## Verification and delivery
 
-- [x] fresh install ผ่าน
-- [x] lint ผ่าน
-- [x] tests ผ่าน
-- [x] production build ผ่าน
-- [x] สรุปสิ่งที่เก็บ / แก้ / ยังไม่ผ่าน
-- [ ] บันทึก commit SHA และตัดสิน PHASE 0 PASS หรือ PHASE 0 NOT READY
+- [ ] fresh install ผ่าน
+- [ ] lint ผ่าน
+- [ ] tests ผ่าน
+- [ ] production build ผ่าน
+- [ ] route/runtime/CI/deployment-readback ตรวจได้
+- [ ] commit และ push ไป `aodxx/KCG-Health-OSM`
+- [ ] รายงาน branch, SHA, results และ SYNCED/NOT SYNCED TO GITHUB
+- [ ] ห้ามเริ่ม Phase 1 เอง

@@ -1,57 +1,45 @@
 # KCG Health OSM
 
-KCG Health OSM คือ PWA ภาษาไทยสำหรับสนับสนุนการทำงานภาคสนามและการประสานการดูแลระหว่างครัวเรือน อสม. และเจ้าหน้าที่สาธารณสุข/แพทย์ในตำบลโคกชะงาย อำเภอเมืองพัทลุง จังหวัดพัทลุง
+## Product Direction
 
-## สถานะโครงการ
+KCG Health OSM เป็นระบบสำหรับออกแบบ กระจาย กรอก ตรวจ และติดตามแบบคัดกรองสุขภาพระดับชุมชน โดยแกนผลิตภัณฑ์คือ `Create Form → Define Audience → Publish → Complete → Review → Follow-up/Referral → Export-ready` เชื่อมแพทย์/เจ้าหน้าที่ รพ.สต. อสม. ครัวเรือน และประชาชน ระบบไม่ใช่ Smart อสม., HDC, HIS หรือเวชระเบียนเต็มรูปแบบ
 
-ขณะนี้โครงการอยู่ใน **Phase 0 — Repository & Frontend Foundation** โดยมี app shell, role-based prototype switcher, route skeleton, shared foundation components, synthetic mock repository, repository/data adapter contract, offline queue contract, PWA metadata และ quality gates แล้ว ส่วน implementation ของ Phase 1 ถูกเก็บไว้ใต้ `client/src/paused/phase1/` และไม่ถูกนำเข้า runtime หรือ default test suite
+เอกสารอำนาจสูงสุดของทิศทางปัจจุบันคือ `docs/product/PRODUCT-DEFINITION-v0.2.md` และ `PRD.md` ส่วนเอกสาร architecture ใช้กำหนด domain, provenance, access boundary และแนวทางต่อยอด backend ในอนาคต
 
-ข้อมูลทั้งหมดใน UI เป็นข้อมูลสังเคราะห์เพื่อทดสอบ workflow เท่านั้น โครงการนี้ไม่ใช่ Smart อสม., HDC, HIS, EMR เต็มรูปแบบ หรือระบบวินิจฉัยโรค
+## Current Phase
 
-## Stack
+โครงการอยู่ใน **Phase 0 Recovery / Repository & Frontend Foundation** เท่านั้น โค้ด Phase 1 เดิมถูกเก็บใน `client/src/paused/phase1/` และ `tests/paused/phase1/` เพื่อไม่ให้ workflow เยี่ยมบ้าน/NCD/Referral เดิมกำหนด architecture ใหม่ โครงการ Phase 0 ใช้ synthetic/mock data เท่านั้น และไม่มี Supabase, API, Google Sheets, Smart อสม. integration หรือ production backend
 
-| ส่วน | เทคโนโลยี |
-|---|---|
-| Frontend | React 19 + TypeScript |
-| Build | Vite 7 |
-| Styling | Tailwind CSS 4 + design tokens |
-| Routing | Wouter |
-| Components | shadcn/ui + Radix UI |
-| PWA | Web App Manifest + service worker shell |
-| Tests | Vitest + Testing Library + jsdom |
-| Quality | ESLint + TypeScript check + Prettier |
-| CI | GitHub Actions |
+Phase 0 เตรียม role shells, route skeletons, Thai-first mobile PWA shell, design tokens, FormDefinition/FormVersion/FormQuestion, Campaign/AudienceSelection, household responsibility, Submission provenance, repository interfaces, mock adapters, offline queue/idempotency model, tests, lint, build และ CI โดยยังไม่สร้าง Form Builder หรือ workflow เต็ม
 
-## เริ่มต้นใช้งานในเครื่อง
-
-ต้องใช้ Node.js 22 และ pnpm 10 จากนั้นรันคำสั่งต่อไปนี้
+## Local development
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-คำสั่งตรวจสอบมาตรฐานของ Phase 0 คือ:
+Quality gates:
 
 ```bash
 pnpm check
 pnpm lint
-pnpm test
+pnpm test --run
 pnpm build
 ```
 
-## โหมดสาธิต
+เปิดใช้งาน role shells ผ่าน `/volunteer`, `/staff` และ `/citizen` ส่วนเส้นทางย่อยเป็น route skeleton ที่แสดงขอบเขต Phase 0 และไม่ควรชี้ไปหน้า 404
 
-เปิดหน้า `/volunteer` เพื่อดู dashboard งานของ อสม. เปิด `/staff` เพื่อดู triage overview และเปิด `/citizen` เพื่อดู citizen shell แบบจำกัดขอบเขต ผู้ใช้จำลองสามารถเปลี่ยนได้จาก role switcher ใน sidebar บน desktop หรือใช้ navigation บน mobile
+## Data and security boundary
 
-## ขอบเขตและ guardrails
+ข้อมูลใน development/test ต้องเป็นข้อมูลสังเคราะห์เท่านั้น ห้ามใส่ CID, HN, เบอร์โทร, เวชระเบียน หรือข้อมูลสุขภาพจริงลง repository ห้ามใส่ secret หรือ service-role key ใน frontend และห้ามสร้างการเชื่อมต่อระบบภายนอกก่อนผ่าน phase gate และ architecture review
 
-Phase 0 ยังไม่เชื่อม Supabase, Auth, Storage, API, external integration หรือฐานข้อมูลจริง และยังไม่สร้าง `supabase/` การทำ backend จะเริ่มได้ต่อเมื่อ architecture review และ security model ผ่าน gate ที่กำหนดในเอกสาร D5/D6/D7 โดย adapter interface ใน `client/src/data/repository.ts` เป็นเพียง boundary สำหรับอนาคต
+## Source of truth
 
-ห้าม commit CID, HN, เบอร์โทร, ที่อยู่ละเอียด, health records จริง, export ของประชาชน, secret หรือ service-role key ลง repository นี้ การแสดง risk ใน prototype เป็น workflow state เท่านั้น ไม่ใช่ผลวินิจฉัย
-
-## เอกสารอ้างอิงภายใน
-
-เอกสาร source of truth ถูกคัดลอกไว้ใต้ `docs/` ได้แก่ PRD, system blueprint, MVP workflow/permissions, UI information architecture, logical data model, RLS matrix, synthetic seed specification, development plan และ Phase 0 checklist
-
-เอกสารการเตรียม tooling อยู่ที่ `docs/development/PHASE-0-TOOLING-READINESS.md` และแนวทางภาพ/interaction อยู่ที่ `ideas.md`
+- `docs/product/PRODUCT-DEFINITION-v0.2.md`
+- `PRD.md`
+- `AGENTS.md`
+- `docs/development/PHASE-0-CHECKLIST.md`
+- `docs/development/D7-DEVELOPMENT-PLAN-v0.1.md`
+- `docs/development/AUTONOMOUS-AGENT-RULES.md`
+- `docs/architecture/`

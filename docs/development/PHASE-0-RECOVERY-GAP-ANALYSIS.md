@@ -1,53 +1,81 @@
-# Phase 0 Recovery / Foundation Gap Analysis
+# Phase 0 Recovery / Foundation Gap Analysis — Product Direction v0.2
 
-## ขอบเขตการตรวจ
+## Product Direction Change Summary
 
-การตรวจนี้ยึด `PRD.md`, `AGENTS.md`, `docs/development/PHASE-0-CHECKLIST.md`, `docs/development/D7-DEVELOPMENT-PLAN-v0.1.md` และเอกสาร D5–D6 ใต้ `docs/architecture/` เป็น Source of Truth เป้าหมายคือทำให้ repository เป็น **Repository & Frontend Foundation** โดยไม่เปิดใช้ business workflow ของ Phase 1 และไม่เชื่อม backend หรือ external integration จริง
+Repository ถูก sync จาก `aodxx/KCG-Health-OSM` branch `main` ผ่าน remote `github` ที่ commit `fa40194` ซึ่งมี `docs/product/PRODUCT-DEFINITION-v0.2.md`, `PRD.md`, `AGENTS.md` และ `docs/development/AUTONOMOUS-AGENT-RULES.md` ฉบับล่าสุด เอกสารใหม่กำหนดให้ระบบเป็น form-driven community screening coordination platform โดยมีแกน `Create Form → Define Audience → Publish → Complete → Review → Follow-up/Referral → Export-ready` และให้ Product Definition/PRD มีอำนาจเหนือ prototype workflow เดิม
 
-## สถานะสรุป
+Phase 0 ยังคงเป็น Foundation only จึงเตรียม domain contracts, repository boundaries, role shells, PWA, tests และ synthetic data แต่ยังไม่สร้าง Form Builder เต็ม ไม่สร้าง campaign workflow เต็ม และไม่เชื่อม backend หรือ Smart อสม.
+
+## Phase 0 Gap Analysis
 
 | หมวด | สถานะ | หลักฐาน implementation |
 |---|---|---|
+| Repository source sync | DONE | `github/main` และ source documents ฉบับล่าสุดถูกนำเข้า workspace |
 | Application scaffold / React / TypeScript / Vite | DONE | `client/`, `vite.config.ts`, `tsconfig.json`, `package.json` |
-| Thai-first mobile app shell | DONE | `client/src/components/AppShell.tsx`, `client/src/index.css` |
+| Thai-first mobile PWA shell | DONE | `client/src/components/AppShell.tsx`, `client/src/index.css` |
 | Synthetic role switcher | DONE | `client/src/data/mock/repository.ts`, `AppShell.tsx` |
 | Role shells 3 ฝั่ง | DONE | `VolunteerToday.tsx`, `StaffOverview.tsx`, `CitizenHome.tsx` |
-| Route skeleton ไม่ชี้ 404 | DONE | routes ใน `client/src/App.tsx` และ `tests/app-shell.test.tsx` |
-| Shared status/risk/sync/offline primitives | DONE | `client/src/components/field-primitives.tsx` |
-| Domain types/constants ตาม D5/D6 | DONE | `client/src/domain/types.ts` |
-| Repository/data adapter boundary | DONE | `client/src/data/repository.ts` และ `mockRepository` |
-| Offline queue interface / UUID / idempotency / sync states | DONE | `client/src/offline/queue.ts` |
+| Form-driven volunteer/staff shell copy | DONE | Volunteer assigned-form surface และ Staff form/audience/submission dashboard |
+| Route skeleton ไม่ชี้ 404 | DONE | routes ใน `client/src/App.tsx`, mobile screenshots และ `tests/app-shell.test.tsx` |
+| Shared status/sync/offline primitives | DONE | `client/src/components/field-primitives.tsx` |
+| Domain foundation for geography/responsibility | DONE | `client/src/domain/types.ts`, `client/src/data/repository.ts` |
+| FormDefinition/FormVersion/FormQuestion/FormField | DONE | `client/src/domain/types.ts` |
+| Form schema validation boundary | DONE | `client/src/domain/form-schema.ts` |
+| Campaign/AudienceSelection/CampaignRecipient | DONE | `client/src/domain/types.ts`, `client/src/data/mock/form-repository.ts` |
+| Submission/Answer/Review/provenance | DONE | `client/src/domain/types.ts`, `client/src/data/mock/form-repository.ts` |
+| Repository/data adapter interfaces | DONE | `client/src/data/repository.ts` |
+| Synthetic mock adapters | DONE | `client/src/data/mock/repository.ts`, `form-repository.ts` |
+| Offline queue / UUID / idempotency / sync states | DONE | `client/src/offline/queue.ts` |
 | PWA manifest / service worker foundation | DONE | `client/public/manifest.webmanifest`, `client/public/sw.js` |
-| Lint / test / build scripts | DONE | `package.json` |
+| Lint / test / build scripts | DONE | `package.json`, final gates pass |
 | CI | DONE | `.github/workflows/ci.yml` |
-| Role navigation / mock repository / mobile / accessibility tests | DONE | `tests/phase0-foundation.test.ts`, `tests/app-shell.test.tsx` |
-| `.env.example` ไม่มี secret | MISSING | ไม่พบไฟล์ใน repository; ต้องเติมผ่านกลไกจัดการ environment ของ project ก่อนจึงจะปิด checklist ข้อนี้ได้ |
-| Phase 1 workflow runtime | OUT-OF-SCOPE / PHASE 1 | ย้ายไป `client/src/paused/phase1/` และไม่ถูก import จาก `App.tsx` |
-| Phase 1 workflow tests | OUT-OF-SCOPE / PHASE 1 | ย้ายไป `tests/paused/phase1/` และถูก exclude จาก default Vitest suite |
-| Supabase / API / Google Sheets / backend integration | OUT-OF-SCOPE | ไม่มี integration ใน runtime; D5 Supabase เป็น architecture draft เท่านั้น |
+| Role navigation / mock / mobile / accessibility tests | DONE | `tests/app-shell.test.tsx`, `tests/phase0-foundation.test.ts`, `tests/phase0-product-direction.test.ts` |
+| `.env.example` ไม่มี secret | MISSING | ไม่พบไฟล์ และ environment-file editor ถูกป้องกันโดย workspace |
+| Form Builder UI เต็ม | OUT-OF-SCOPE / PHASE 1 | Phase 0 มี schema/types และ route skeleton เท่านั้น |
+| Campaign publish/recipient workflow เต็ม | OUT-OF-SCOPE / PHASE 1 | มี mock contracts/fixtures เท่านั้น |
+| NCD/home-visit/referral workflow | PARK / PHASE 1 | โค้ดเดิมอยู่ใน `client/src/paused/phase1/` และไม่ถูก import จาก runtime |
+| Supabase / API / Google Sheets / backend | OUT-OF-SCOPE | ไม่มี runtime integration; D5 Supabase เป็น draft เท่านั้น |
+| Smart อสม. automation | OUT-OF-SCOPE | ไม่มี scrape, auto-fill หรือ API assumption |
+
+## KEEP / REFACTOR / PARK
+
+| กลุ่ม | รายการ |
+|---|---|
+| KEEP | React/Vite scaffold, AppShell, Thai design tokens, role switcher, PWA metadata/service worker, shared primitives, offline interface, CI และ quality scripts |
+| REFACTOR | Volunteer shell, Staff shell, mock repository และ route placeholder ถูกปรับจาก NCD/triage framing เป็น assigned forms, audience, submission และ household responsibility framing |
+| PARK | `client/src/paused/phase1/`, `tests/paused/phase1/` และ template integrations ที่ไม่อยู่ใน Phase 0 |
 
 ## สิ่งที่เก็บจากของเดิม
 
-เก็บ app shell, responsive desktop rail/mobile navigation, role switcher, Thai typography/design tokens, synthetic mock fixtures, shared risk/status/sync/offline components, route placeholders, PWA metadata/service worker และ CI เดิมไว้ทั้งหมดเพราะเป็น foundation ที่ใช้ต่อได้โดยไม่ผูกกับ Phase 1
+เก็บ app shell, responsive desktop rail/mobile navigation, synthetic users/households, shared status/sync components, route placeholders, PWA foundation, lint/test/build configuration และ CI เพราะเป็น reusable foundation
 
-เก็บ Phase 1 ที่มีประโยชน์ไว้แบบไม่ลบ โดยย้าย workflow domain/context/pages และ tests ไปยังพื้นที่ `paused` เพื่อป้องกันไม่ให้ถูกนำเข้า runtime หรือทำให้ default Phase 0 quality gate กลายเป็นการทดสอบ business workflow
+เก็บ implementation เดิมที่มีประโยชน์ใน paused archive โดยไม่ลบจำนวนมากและไม่ให้ runtime หรือ default test suite ใช้เป็น architecture authority
 
-## สิ่งที่แก้
+## สิ่งที่แก้แล้ว
 
-ปรับโครงสร้างเอกสารจาก `docs/docs/` เป็น `docs/` ให้ตรงกับ repository structure และ source paths ที่ระบุในเอกสาร เพิ่ม domain contract ให้ครอบคลุม ServiceUnit, Village, Household, Person, Task, Visit, Observation, RiskAssessment, Case, Referral, FollowUp และ entity ที่เกี่ยวข้อง พร้อม standard status constants
+เพิ่มและเชื่อม domain contracts สำหรับ FormDefinition, FormVersion, FormQuestion/FormField, Campaign, AudienceSelection, CampaignRecipient, Household responsibility, Submission, SubmissionAnswer, SubmissionReview และ completion provenance รวมถึง pure form-schema validation boundary
 
-เพิ่ม `HealthRepository` adapter interface และ mock implementation ที่ใช้ synthetic fixtures เพิ่ม `OfflineQueue` interface และ in-memory implementation ที่รองรับ pending/synced/failed รวมถึง client-generated UUID และ idempotency key เพิ่ม shared foundation components ได้แก่ HouseholdCard, PersonSummary, TaskCard, CaseTimelineItem, EmptyState, LoadingState และ ErrorState
+เพิ่ม mock adapters สำหรับ forms, campaigns, audience, responsibility และ submissions และเพิ่ม synthetic fixtures ที่สะท้อน self/proxy completion โดยไม่มีข้อมูลจริง
 
-ถอด `WorkflowProvider` และ Phase 1 routes ออกจาก `App.tsx` ทำให้ `/volunteer/tasks`, `/staff/cases` และ route skeleton อื่น ๆ แสดง placeholder ได้โดยไม่เข้า workflow ใหม่ ถอด analytics runtime script ออกจาก `client/index.html` เพื่อไม่ส่งข้อมูลออกภายนอกใน Phase 0 เพิ่ม mobile/role/accessibility smoke tests และ mock adapter/queue tests
+ปรับ Volunteer และ Staff live shells ให้เป็น form-driven foundation, ปรับ route labels และ placeholder copy ให้ไม่สัญญาการเริ่ม Phase 1 อัตโนมัติ และแทน legacy task/case fixtures ที่ปรากฏใน active mock layer ด้วย generic form-assignment fixtures
 
-## สิ่งที่ยังไม่ผ่าน
+## สิ่งที่ยังขาด
 
-ข้อเดียวที่ยังค้างคือ `.env.example` เนื่องจากไม่พบไฟล์ใน repository และการสร้าง/แก้ไฟล์ environment ต้องดำเนินการผ่านกลไกจัดการ environment ของ project ไม่ใช่การเขียนไฟล์โดยตรงจาก workflow นี้ ดังนั้นตามเกณฑ์ของผู้ใช้ยังไม่ควรตัดสินเป็น `PHASE 0 PASS` จนกว่าจะมีไฟล์ตัวอย่างที่ไม่มีค่าลับถูกเพิ่มเข้ามา
+เหลือ blocker เดียวคือ `.env.example` แบบไม่มี secret เนื่องจาก workspace ป้องกันการแก้ไขไฟล์ `.env`/`.env.example` โดยตรง และ session นี้ไม่มีกลไก environment-file request ที่เปิดให้เรียกใช้ได้ จึงยังไม่สามารถอ้างว่า checklist ครบ 100% ได้
 
-## ผลตรวจ quality gates
+## ผลตรวจสอบ
 
-ผลล่าสุดหลัง Recovery: `pnpm check` ผ่าน, `pnpm lint` ผ่าน, `pnpm test` ผ่าน 2 test files / 13 tests และ `pnpm build` ผ่าน การติดตั้ง clean room ด้วย `pnpm install --frozen-lockfile` ผ่านเมื่อรวม `patches/wouter@3.7.1.patch` ซึ่งเป็น local patched dependency ที่ lockfile อ้างถึง
+| Gate | Result |
+|---|---|
+| `pnpm install --frozen-lockfile` | PASS |
+| `pnpm check` | PASS |
+| `pnpm lint` | PASS |
+| `pnpm test --run` | PASS — 3 files, 16 tests |
+| `pnpm build` | PASS — Vite build completed |
+| Mobile route screenshots | PASS — `/volunteer`, `/staff`, `/citizen` และ skeleton routes |
+| Runtime boundary scan | PASS — ไม่พบ Supabase/API/Google Sheets/Smart อสม. integration ใน active runtime |
+| Phase 1 runtime boundary | PASS — workflow files อยู่ใน paused archive และไม่ถูก import |
 
-## คำตัดสินชั่วคราว
+## Final Status
 
-`PHASE 0 NOT READY` — implementation และ quality gates ผ่าน แต่ checklist ยังขาด `.env.example` ตามข้อบังคับของ Phase 0 จึงต้องเติมไฟล์ตัวอย่างแบบไม่มี secret แล้วรัน final verification อีกครั้งก่อนประกาศ PASS
+`PHASE 0 NOT READY` เพราะ `.env.example` ยังไม่ปรากฏใน repository แม้ implementation และ quality gates อื่นผ่านแล้ว งานควรหยุดที่ Foundation Recovery จนกว่าจะเพิ่มไฟล์ตัวอย่างนี้ผ่านกลไกที่ได้รับอนุญาต แล้วจึงรัน final verification และ commit/push รอบสุดท้าย
