@@ -17,13 +17,14 @@ Read in this order:
 3. `MASTER-ROADMAP.md`
 4. `AGENTS.md`
 5. `docs/architecture/DATABASE-DESIGN-v0.2.md`
-6. `docs/development/AUTONOMOUS-AGENT-RULES.md`
-7. `docs/development/PHASE-0-CHECKLIST.md`
-8. `docs/development/D7-DEVELOPMENT-PLAN-v0.2.md`
-9. `docs/development/REPOSITORY-STRUCTURE.md`
-10. remaining architecture/data-model documents as historical/supporting references only
+6. `docs/development/GITHUB-PAGES-DEPLOYMENT.md`
+7. `docs/development/AUTONOMOUS-AGENT-RULES.md`
+8. `docs/development/PHASE-0-CHECKLIST.md`
+9. `docs/development/D7-DEVELOPMENT-PLAN-v0.2.md`
+10. `docs/development/REPOSITORY-STRUCTURE.md`
+11. remaining architecture/data-model documents as historical/supporting references only
 
-`D7-DEVELOPMENT-PLAN-v0.1.md`, D5/D6 v0.1 database documents and older blueprint/workflow documents are historical references when they conflict with Product Definition v0.2, PRD, Master Roadmap, or `DATABASE-DESIGN-v0.2.md`.
+`D7-DEVELOPMENT-PLAN-v0.1.md`, D5/D6 v0.1 database documents and older blueprint/workflow documents are historical references when they conflict with Product Definition v0.2, PRD, Master Roadmap, `DATABASE-DESIGN-v0.2.md`, or the active GitHub Pages deployment decision.
 
 ## Product Rules — Non-Negotiable
 - Staff/clinician starts MVP campaigns by creating/publishing forms.
@@ -38,6 +39,7 @@ Read in this order:
 
 ## Frontend Hosting — HARD RULE
 - Frontend hosting standard is **GitHub Pages** from `aodxx/KCG-Health-OSM`.
+- Canonical deployment spec: `docs/development/GITHUB-PAGES-DEPLOYMENT.md`.
 - Expected public URL is `https://aodxx.github.io/KCG-Health-OSM/`.
 - Build/config must support base path `/KCG-Health-OSM/`.
 - Manifest, service worker, asset paths and client routing must work under that base path.
