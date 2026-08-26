@@ -4,7 +4,7 @@ KCG Health OSM คือ PWA ภาษาไทยสำหรับสนับ
 
 ## สถานะโครงการ
 
-ขณะนี้โครงการอยู่ใน **Phase 0 — Repository & Frontend Foundation** โดยมี app shell, role-based prototype switcher, route skeleton, shared status/risk/sync components, mock repository, offline mutation primitive, PWA metadata และ quality gates ขั้นพื้นฐานแล้ว
+ขณะนี้โครงการอยู่ใน **Phase 0 — Repository & Frontend Foundation** โดยมี app shell, role-based prototype switcher, route skeleton, shared foundation components, synthetic mock repository, repository/data adapter contract, offline queue contract, PWA metadata และ quality gates แล้ว ส่วน implementation ของ Phase 1 ถูกเก็บไว้ใต้ `client/src/paused/phase1/` และไม่ถูกนำเข้า runtime หรือ default test suite
 
 ข้อมูลทั้งหมดใน UI เป็นข้อมูลสังเคราะห์เพื่อทดสอบ workflow เท่านั้น โครงการนี้ไม่ใช่ Smart อสม., HDC, HIS, EMR เต็มรูปแบบ หรือระบบวินิจฉัยโรค
 
@@ -46,7 +46,7 @@ pnpm build
 
 ## ขอบเขตและ guardrails
 
-Phase 0 ยังไม่เชื่อม Supabase, Auth, Storage, API, external integration หรือฐานข้อมูลจริง และยังไม่สร้าง `supabase/` การทำ backend จะเริ่มได้ต่อเมื่อ architecture review และ security model ผ่าน gate ที่กำหนดในเอกสาร D5/D6/D7
+Phase 0 ยังไม่เชื่อม Supabase, Auth, Storage, API, external integration หรือฐานข้อมูลจริง และยังไม่สร้าง `supabase/` การทำ backend จะเริ่มได้ต่อเมื่อ architecture review และ security model ผ่าน gate ที่กำหนดในเอกสาร D5/D6/D7 โดย adapter interface ใน `client/src/data/repository.ts` เป็นเพียง boundary สำหรับอนาคต
 
 ห้าม commit CID, HN, เบอร์โทร, ที่อยู่ละเอียด, health records จริง, export ของประชาชน, secret หรือ service-role key ลง repository นี้ การแสดง risk ใน prototype เป็น workflow state เท่านั้น ไม่ใช่ผลวินิจฉัย
 

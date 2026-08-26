@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { cases, getVolunteerTasks, mockUsers } from "@/data/mock/repository";
-import { createMutation } from "@/offline/queue";
+import { cases, getVolunteerTasks, mockRepository, mockUsers } from "@/data/mock/repository";
+import { createMemoryQueue, createMutation } from "@/offline/queue";
 
 describe("Phase 0 domain and mock foundation", () => {
   it("keeps the urgent synthetic case explicit and non-diagnostic", () => {
@@ -22,5 +22,20 @@ describe("Phase 0 domain and mock foundation", () => {
 
   it("ships only synthetic role fixtures", () => {
     expect(mockUsers.map((user) => user.id)).toEqual(["U-VOL06", "U-STAFF02", "U-CLIN01", "U-CIT01"]);
+  });
+
+  it("exposes a mock repository behind the adapter contract", async () => {
+    const result = await mockRepository.listTasks("U-VOL06");
+    expect(result.length).toBeGreaterThan(0);
+    expect(result.every((task) => task.householdId.startsWith("HH06") || task.householdId === "HH0101")).toBe(true);
+  });
+
+  it("supports explicit local queue state transitions", () => {
+    const queue = createMemoryQueue<{ taskId: string }>();
+    const mutation = createMutation("task_status", { taskId: "TASK03" });
+    queue.enqueue(mutation);
+    expect(queue.list()[0].state).toBe("pending");
+    expect(queue.markState(mutation.mutationId, "synced")).toBe(true);
+    expect(queue.list()[0].state).toBe("synced");
   });
 });

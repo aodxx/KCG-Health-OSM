@@ -1,5 +1,6 @@
 // Civic Field Notes: all records here are synthetic fixtures for Phase 0 only.
 import type { CaseSummary, Household, MockUser, Task } from "@/domain/types";
+import type { HealthRepository } from "@/data/repository";
 
 export const mockUsers: MockUser[] = [
   { id: "U-VOL06", name: "วาสนา ร่มเย็น", role: "volunteer", scopeLabel: "หมู่ 6 · บ้านโคกมะม่วง" },
@@ -30,3 +31,13 @@ export const cases: CaseSummary[] = [
 export const getVolunteerTasks = () => tasks.filter((task) => task.householdId.startsWith("HH06") || task.householdId === "HH0101");
 export const getHouseholds = () => households;
 export const getCases = () => cases;
+
+export const mockRepository: HealthRepository = {
+  async listUsers() { return mockUsers.map((user) => ({ ...user })); },
+  async listTasks(scopeUserId) {
+    const user = mockUsers.find((item) => item.id === scopeUserId);
+    return user?.role === "volunteer" ? getVolunteerTasks().map((task) => ({ ...task })) : tasks.map((task) => ({ ...task }));
+  },
+  async listHouseholds(_scopeUserId) { return households.map((household) => ({ ...household })); },
+  async listCases(_scopeUserId) { return cases.map((item) => ({ ...item })); },
+};

@@ -1,5 +1,5 @@
 // Civic Field Notes: shared visual language for status, risk, sync, and field-note hierarchy.
-import { AlertTriangle, Check, CloudOff, Clock3, MapPin, RefreshCw, Wifi } from "lucide-react";
+import { AlertTriangle, Check, ChevronRight, CloudOff, Clock3, ClipboardList, MapPin, RefreshCw, UserRound, Wifi } from "lucide-react";
 import type { RiskLevel, SyncState, TaskStatus } from "@/domain/types";
 import { cn } from "@/lib/utils";
 
@@ -11,10 +11,12 @@ const riskMeta: Record<RiskLevel, { label: string; icon: typeof Check; className
 };
 
 const statusLabels: Record<TaskStatus, string> = {
+  new: "งานใหม่",
   assigned: "มอบหมายแล้ว",
   in_progress: "กำลังทำ",
   submitted: "ส่งแล้ว",
   under_review: "เจ้าหน้าที่กำลังตรวจ",
+  referred: "ส่งต่อแล้ว",
   follow_up: "ติดตามต่อ",
   closed: "ปิดงานแล้ว",
 };
@@ -49,4 +51,32 @@ export function FieldNoteRule({ children }: { children: React.ReactNode }) {
 
 export function VillageLabel({ children }: { children: React.ReactNode }) {
   return <span className="village-label"><MapPin size={13} aria-hidden="true" />{children}</span>;
+}
+
+export function HouseholdCard({ household }: { household: import("@/domain/types").Household }) {
+  return <article className="household-row"><span className="household-icon"><UserRound size={17} aria-hidden="true" /></span><span><strong>{household.label}</strong><span>{household.memberCount} คน · {household.assignedVolunteer}</span></span><ChevronRight className="muted-icon" size={17} aria-hidden="true" /></article>;
+}
+
+export function PersonSummary({ person }: { person: import("@/domain/types").Person }) {
+  return <div className="subject-card"><span className="subject-avatar"><UserRound size={18} aria-hidden="true" /></span><span><span className="eyebrow">บุคคลในครัวเรือน</span><strong>{person.displayName}</strong><span>อายุ {person.age} ปี · {person.useCase}</span></span></div>;
+}
+
+export function TaskCard({ task }: { task: import("@/domain/types").Task }) {
+  return <article className="task-card"><span className="task-margin" aria-hidden="true">{task.id.slice(-2)}</span><div className="task-body"><div className="task-topline"><span className="task-type"><ClipboardList size={13} aria-hidden="true" />{task.type}</span><RiskBadge level={task.risk} /></div><h3>{task.title}</h3><p className="task-subject">{task.subject}</p><div className="task-footer"><TaskStatusBadge status={task.status} /><SyncStatusIndicator state={task.syncState} /></div></div></article>;
+}
+
+export function CaseTimelineItem({ event }: { event: import("@/domain/types").CaseEvent }) {
+  return <div className="timeline-item"><span className="timeline-dot" aria-hidden="true" /><div><span className="timeline-meta">{event.occurredAt} · {event.eventType}</span><strong>เหตุการณ์ในเคส</strong><p>บันทึกโดยผู้ใช้งานในขอบเขตที่ได้รับอนุญาต</p></div></div>;
+}
+
+export function EmptyState({ title = "ยังไม่มีรายการ", detail = "ข้อมูลจะแสดงเมื่อมีรายการในขอบเขตของคุณ" }: { title?: string; detail?: string }) {
+  return <div className="empty-state" role="status"><ClipboardList size={20} aria-hidden="true" /><strong>{title}</strong><p>{detail}</p></div>;
+}
+
+export function LoadingState({ label = "กำลังเตรียมข้อมูล" }: { label?: string }) {
+  return <div className="empty-state" role="status" aria-live="polite"><RefreshCw size={18} aria-hidden="true" />{label}</div>;
+}
+
+export function ErrorState({ label = "ไม่สามารถแสดงข้อมูลได้" }: { label?: string }) {
+  return <div className="empty-state error-state" role="alert"><AlertTriangle size={18} aria-hidden="true" />{label}</div>;
 }
