@@ -42,13 +42,13 @@ export function AppShell({ user, onUserChange, children }: { user: MockUser; onU
   const nav = roleNav[user.role];
   return <div className="app-frame">
     <aside className="desktop-rail">
-      <div className="brand-lockup"><div className="brand-mark" aria-hidden="true"><span /><span /><span /></div><div><span className="brand-kicker">KCG / FIELD NOTES</span><strong>สุขภาพโคกชะงาย</strong></div></div>
+      <div className="brand-lockup"><div className="brand-mark" aria-hidden="true"><span /><span /><span /></div><div><span className="brand-kicker">KCG / FIELD NOTES</span><strong className="brand-wordmark">สุขภาพโคกชะงาย</strong></div></div>
       <div className="demo-switcher"><span className="eyebrow">โหมดต้นแบบ</span><label htmlFor="role-select">ผู้ใช้งานจำลอง</label><select id="role-select" value={user.id} onChange={(event) => onUserChange(mockUsers.find((item) => item.id === event.target.value) ?? user)}>{mockUsers.map((item) => <option key={item.id} value={item.id}>{roleLabels[item.role]} · {item.name}</option>)}</select><small>ข้อมูลทั้งหมดเป็นข้อมูลจำลอง</small></div>
       <nav className="rail-nav" aria-label="เมนูหลัก">{nav.map(({ label, href, icon: Icon }) => <Link key={href} href={href} className={cn("rail-link", location === href && "is-active")}><Icon size={18} />{label}</Link>)}</nav>
       <div className="rail-footer"><span className="online-pip" />ระบบพร้อมใช้งานในเครื่องนี้<small>Phase 0 · Frontend foundation</small></div>
     </aside>
     <main className="app-main">
-      <header className="mobile-topbar"><div className="brand-mini"><div className="brand-mark" aria-hidden="true"><span /><span /><span /></div><span>KCG Health OSM</span></div><button className="icon-button" aria-label="เมนู"><Menu size={21} /></button></header>
+      <header className="mobile-topbar"><div className="brand-mini"><div className="brand-mark" aria-hidden="true"><span /><span /><span /></div><span className="brand-wordmark">KCG / HEALTH OSM</span></div><button className="icon-button" aria-label="เมนู"><Menu size={21} /></button></header>
       <OfflineBanner />
       <div className="content-wrap">{children}</div>
     </main>
