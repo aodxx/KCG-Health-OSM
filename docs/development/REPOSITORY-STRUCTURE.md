@@ -17,9 +17,11 @@ KCG-Health-OSM/
 ├─ .env.example                # placeholders/comments only, no secrets
 ├─ package.json
 ├─ pnpm-lock.yaml
+├─ vite.config.*               # must support GitHub Pages base path
 ├─ .github/
 │  └─ workflows/
-│     └─ ci.yml
+│     ├─ ci.yml
+│     └─ deploy-pages.yml      # build + deploy GitHub Pages
 ├─ docs/
 │  ├─ product/
 │  ├─ discovery/
@@ -27,7 +29,7 @@ KCG-Health-OSM/
 │  ├─ architecture/
 │  ├─ development/
 │  ├─ prototype/
-│  └─ decisions/               # add ADRs when material architecture decisions occur
+│  └─ decisions/
 ├─ client/
 │  ├─ public/
 │  │  ├─ manifest.webmanifest
@@ -70,15 +72,32 @@ KCG-Health-OSM/
 │     ├─ lib/
 │     ├─ styles/
 │     └─ utils/
-├─ server/                      # minimal runtime/server boundary only if scaffold requires it
-├─ shared/                      # cross-runtime types/schemas only when genuinely shared
+├─ server/                      # backend runtime boundary only when later phase requires it
+├─ shared/
 └─ tests/
    ├─ unit/
    ├─ integration/
    └─ smoke/
 ```
 
-Actual implementation may keep a flatter directory where the framework/tooling requires it, but the architectural separation below is mandatory.
+Actual implementation may keep a flatter directory where the framework/tooling requires it, but architectural separation and deployment rules below are mandatory.
+
+## Frontend Hosting Boundary
+
+Frontend hosting is fixed to **GitHub Pages**.
+
+Repository/public target:
+`https://aodxx.github.io/KCG-Health-OSM/`
+
+Required implementation consequences:
+- Vite/build base path must work under `/KCG-Health-OSM/`
+- public assets must use Pages-safe paths
+- manifest start_url/scope and service worker registration/scope must work under repository path
+- router/deep-link strategy must not depend on a server rewrite that GitHub Pages does not provide
+- deployment workflow must use GitHub Pages Actions or an equivalent GitHub-native Pages publication path
+- built frontend must remain static-host compatible
+
+Backend/Auth/database services introduced later must not be hosted inside GitHub Pages. They are external secure services accessed from the static frontend through HTTPS APIs/SDKs.
 
 ## Mandatory Separation
 
@@ -121,6 +140,7 @@ When introduced:
 - exposed data is protected by server-enforced authorization/RLS or equivalent
 - service secrets never enter frontend code
 - positive and negative scope tests are required
+- frontend continues to deploy via GitHub Pages unless owner approves a hosting change
 
 ## Offline Boundary
 
@@ -140,6 +160,8 @@ Do not use timestamp-only IDs as the primary idempotency strategy.
 - `AGENTS.md` defines AI execution rules
 - `PROGRESS.md` records current implementation state
 - `D7-DEVELOPMENT-PLAN-v0.2.md` is the active implementation plan
+- `DATABASE-DESIGN-v0.2.md` is the canonical data design
+- GitHub Pages is the fixed frontend hosting decision
 - v0.1/older blueprint docs that conflict are historical references
 
 ## Files Forbidden from Git
@@ -162,6 +184,7 @@ Before phase PASS:
 3. verify one package manager and lockfile
 4. verify `.env.example` has no secrets
 5. run check/lint/test/build
-6. verify routes/runtime
-7. verify CI/readback
-8. update `PROGRESS.md`
+6. verify routes/runtime under `/KCG-Health-OSM/`
+7. verify CI
+8. verify GitHub Pages deployment/public readback when frontend changed
+9. update `PROGRESS.md`
