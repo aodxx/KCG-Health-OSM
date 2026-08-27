@@ -1,0 +1,15 @@
+{
+  "name": "KCG Health OSM · สุขภาพโคกชะงาย",
+  "short_name": "KCG Health OSM",
+  "description": "ระบบงานภาคสนามและการประสานการดูแลสุขภาพชุมชน",
+  "lang": "th",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F6F2E9",
+  "theme_color": "#0F6B68",
+  "icons": [
+    { "src": "/manus-storage/kcg-health-osm-mark_29ed0e81.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/manus-storage/kcg-health-osm-mark_29ed0e81.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
